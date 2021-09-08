@@ -16,7 +16,6 @@ $ ppm init
 Either declare a plugin to install or install all plugins that are declared in the `ppm.json` file
 
 ```
-
 $ ppm install <plugin>
 ```
 
@@ -24,7 +23,6 @@ $ ppm install <plugin>
 Update all your plugins
 
 ```
-
 $ ppm update
 ```
 
