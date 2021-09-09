@@ -1,6 +1,9 @@
 package pkg
 
-import "os"
+import (
+	"os"
+	"strings"
+)
 
 // Check wether an absolute path exists
 func DoesPathExist(path string) (bool, error) {
@@ -50,4 +53,16 @@ func StringSliceContains(target string, data []string) bool {
 	}
 
 	return false
+}
+
+func GetVersionOrNot(dependency string) string {
+	version := ""
+	
+	splitDependency := strings.Split(dependency, "@")
+	
+	if len(splitDependency) > 1 {
+		version = splitDependency[1]
+	}
+
+	return version
 }
