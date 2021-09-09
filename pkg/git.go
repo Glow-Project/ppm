@@ -8,12 +8,16 @@ import (
 )
 
 // Clone a certain github repository into a certain folder
-func Clone(path string, repoName string) error {
+func Clone(path string, repoName string, version string) error {
 	var repository string
 	if strings.HasPrefix(repoName, "http") {
 		repository = repoName
 	} else {
 		repository = fmt.Sprintf("https://github.com/Glow-Project/%s", repoName)
+	}
+
+	if len(version) != 0 {
+		repository = fmt.Sprintf("%s/releases/tag/%s", repository, version)
 	}
 
 	return runGitCommand(exec.Command("git", "clone", repository), path)

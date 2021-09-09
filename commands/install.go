@@ -51,7 +51,8 @@ func install(ctx *cli.Context) error {
 
 func installAllDependencies(config pkg.PpmConfig, currentPath string) error {
 	for _, dependency := range config.Dependencies {
-		err := pkg.Clone(currentPath, dependency)
+		version := pkg.GetVersionOrNot(dependency)
+		err := pkg.Clone(currentPath, dependency, version)
 		if err != nil {
 			return err
 		}
@@ -60,7 +61,9 @@ func installAllDependencies(config pkg.PpmConfig, currentPath string) error {
 }
 
 func installDependency(config pkg.PpmConfig, currentPath string, dependency string) error {
-	err := pkg.Clone(currentPath, dependency)
+	version := pkg.GetVersionOrNot(dependency)
+	
+	err := pkg.Clone(currentPath, dependency, version)
 	if err != nil {
 		return err
 	}
