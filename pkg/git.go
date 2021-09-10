@@ -17,7 +17,7 @@ func Clone(path string, repoName string, version string) error {
 	}
 
 	if len(version) != 0 {
-		repository = fmt.Sprintf("%s/releases/tag/%s", repository, version)
+		repository = fmt.Sprintf("%s/tree/%s", repository, version)
 	}
 
 	return runGitCommand(exec.Command("git", "clone", repository), path)
