@@ -48,6 +48,11 @@ func update(ctx *cli.Context) error {
 
 func updateAllDependencies(config pkg.PpmConfig, currentPath string) error {
 	for _, dependency := range config.Dependencies {
+		_, version := pkg.GetVersionOrNot(dependency)
+		if len(version) > 0 {
+			continue
+		}
+
 		err := pkg.Update(filepath.Join(currentPath, dependency))
 		if err != nil {
 			return err
