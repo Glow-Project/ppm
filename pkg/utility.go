@@ -55,7 +55,7 @@ func StringSliceContains(target string, data []string) bool {
 	return false
 }
 
-func GetVersionOrNot(dependency string) string {
+func GetVersionOrNot(dependency string) (string, string) {
 	version := ""
 	
 	splitDependency := strings.Split(dependency, "@")
@@ -63,6 +63,7 @@ func GetVersionOrNot(dependency string) string {
 	if len(splitDependency) > 1 {
 		version = splitDependency[1]
 	}
+	dependencyName := splitDependency[0]
 
-	return version
+	return dependencyName, version
 }

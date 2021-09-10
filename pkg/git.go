@@ -10,14 +10,15 @@ import (
 // Clone a certain github repository into a certain folder
 func Clone(path string, repoName string, version string) error {
 	var repository string
-	if strings.HasPrefix(repoName, "http") {
+	if strings.HasPrefix(repoName, "https://") {
 		repository = repoName
 	} else {
 		repository = fmt.Sprintf("https://github.com/Glow-Project/%s", repoName)
 	}
 
 	if len(version) != 0 {
-		repository = fmt.Sprintf("%s/tree/%s", repository, version)
+		repository = fmt.Sprintf("%s.git", repository)
+		return runGitCommand(exec.Command("git", "clone", repository, "-b", version), path)
 	}
 
 	return runGitCommand(exec.Command("git", "clone", repository), path)
