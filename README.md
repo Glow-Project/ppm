@@ -36,6 +36,13 @@ $ go mod download
 $ go install
 ```
 
+## Manual installation
+
+Windows:
+
+-   Download the binary
+-   Move binary to `\Users\<User>\go\bin`
+
 ## Requirements
 
 -   [Git](https://git-scm.com/)
