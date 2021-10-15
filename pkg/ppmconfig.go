@@ -90,6 +90,7 @@ func ParsePpmConfig(filePath string) (PpmConfig, error) {
 
 	content, err := ioutil.ReadFile(file.Name())
 	if err != nil {
+		fmt.Println(err)
 		return PpmConfig{}, err
 	}
 
@@ -151,10 +152,8 @@ func GetPluginConfig(dirPath string, dependency string) (PpmConfig, error) {
 		dependencyName = tmp[len(tmp) - 2]
 	}
 
-	config, err := ParsePpmConfig(path.Join(dirPath, "addons", dependencyName))
-	fmt.Println(dirPath)
-	fmt.Println(dependencyName)
-	fmt.Println(config)
+	config, err := ParsePpmConfig(path.Join(dirPath, dependencyName, "ppm.json"))
+
 	if err != nil {
 		return PpmConfig{}, err
 	}

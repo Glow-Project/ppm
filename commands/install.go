@@ -69,17 +69,23 @@ func installDependency(config pkg.PpmConfig, currentPath string, dependency stri
 
 	var addDependency bool
 
-	switch err.Error() {
-	case "":
-		addDependency = true
-
-	case "exit status 128":
-		color.GreenString("Plugin already installed")
-		addDependency = false
+	if err != nil {
 		
-	default:
-		return err
 	}
+
+	if err != nil {
+		switch err.Error() {
+		case "exit status 128":
+			color.GreenString("Plugin already installed")
+			addDependency = false
+			
+		default:
+			return err
+		}
+	} else {
+		addDependency = true
+	}
+	
 	
 	if addDependency && isSubdependency {
 		config.AddSubDependency(dependency)
@@ -90,9 +96,10 @@ func installDependency(config pkg.PpmConfig, currentPath string, dependency stri
 	
 	subConfig, err := pkg.GetPluginConfig(currentPath, dependency)
 	if err != nil {
+		fmt.Println(err)
 		return err
 	}
-
+	
 	// Iterate over dependencies and install them if needed
 	for _, dep := range subConfig.Dependencies {
 		fmt.Println(dep)
