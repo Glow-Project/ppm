@@ -3,8 +3,10 @@ package pkg
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io/ioutil"
 	"os"
+	"path"
 	"path/filepath"
 	"strings"
 )
@@ -13,6 +15,7 @@ import (
 type PpmConfig struct {
 	Plugin       bool     `json:"plugin"`
 	Dependencies []string `json:"dependencies"`
+	SubDependencies []string `json:"sub-dependencies"`
 	filePath string
 }
 
@@ -22,8 +25,22 @@ func (ppm *PpmConfig) AddDependency(dependency string) {
 	ppm.write()
 }
 
+// Add an item safely to the sub-dependencies property
+func (ppm *PpmConfig) AddSubDependency(dependency string) {
+	ppm.SubDependencies = append(ppm.SubDependencies, dependency)
+	ppm.write()
+}
+
+
 // Remove an item safely from the Dependencies property by its name
 func (ppm *PpmConfig) RemoveDependency(dependency string) {
+	index := IndexOf(dependency, ppm.Dependencies)
+	ppm.SubDependencies = append(ppm.SubDependencies[:index], ppm.SubDependencies[index+1:]...)
+	ppm.write()
+}
+
+// Remove an item safely from the sub-dependencies property by its name
+func (ppm *PpmConfig) RemoveSubDependency(dependency string) {
 	index := IndexOf(dependency, ppm.Dependencies)
 	ppm.Dependencies = append(ppm.Dependencies[:index], ppm.Dependencies[index+1:]...)
 	ppm.write()
@@ -32,6 +49,11 @@ func (ppm *PpmConfig) RemoveDependency(dependency string) {
 // Check wether the config file has a certain dependency
 func (ppm PpmConfig) HasDependency(dependency string) bool {
 	return StringSliceContains(dependency, ppm.Dependencies)
+}
+
+// Check wether the config file has a certain sub-dependency
+func (ppm PpmConfig) HasSubDependency(dependency string) bool {
+	return StringSliceContains(dependency, ppm.SubDependencies)
 }
 
 // Write the current state of the configuartion to the config file
@@ -68,6 +90,7 @@ func ParsePpmConfig(filePath string) (PpmConfig, error) {
 
 	content, err := ioutil.ReadFile(file.Name())
 	if err != nil {
+		fmt.Println(err)
 		return PpmConfig{}, err
 	}
 
@@ -99,6 +122,7 @@ func CreateNewPpmConfig(path string) error {
 	config := PpmConfig{
 		Plugin: plugin,
 		Dependencies: []string{},
+		SubDependencies: []string{},
 	}
 
 	content, err := json.MarshalIndent(config, "", " ")
@@ -116,4 +140,23 @@ func CreateNewPpmConfig(path string) error {
 	_, err = file.Write(content)
 	
 	return err
+}
+
+func GetPluginConfig(dirPath string, dependency string) (PpmConfig, error) {
+	tmp := strings.Split(dependency, "/")
+	var dependencyName string
+
+	if tmp[len(tmp) - 1] != "/" {
+		dependencyName = tmp[len(tmp) - 1]
+	} else {
+		dependencyName = tmp[len(tmp) - 2]
+	}
+
+	config, err := ParsePpmConfig(path.Join(dirPath, dependencyName, "ppm.json"))
+
+	if err != nil {
+		return PpmConfig{}, err
+	}
+
+	return config, nil
 }

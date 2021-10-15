@@ -1,0 +1,9 @@
+version: "3"
+
+tasks:
+  install:
+    cmds:
+      - go install
+  i:
+    cmds:
+      - task: install

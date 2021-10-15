@@ -2,10 +2,12 @@ package commands
 
 import (
 	"errors"
+	"fmt"
 	"os"
 	"path/filepath"
 
 	"github.com/Glow-Project/ppm/pkg"
+	"github.com/fatih/color"
 	"github.com/urfave/cli/v2"
 )
 
@@ -41,7 +43,7 @@ func install(ctx *cli.Context) error {
 
 	repo := ctx.Args().Get(0)
 	if len(repo) > 0 {
-		installDependency(config, newPath, repo)
+		installDependency(config, newPath, repo, false)
 	} else {
 		installAllDependencies(config, newPath)
 	}
@@ -60,15 +62,51 @@ func installAllDependencies(config pkg.PpmConfig, currentPath string) error {
 	return nil
 }
 
-func installDependency(config pkg.PpmConfig, currentPath string, dependency string) error {
+func installDependency(config pkg.PpmConfig, currentPath string, dependency string, isSubdependency bool) error {
 	dependency, version := pkg.GetVersionOrNot(dependency)
 	
 	err := pkg.Clone(currentPath, dependency, version)
+
+	var addDependency bool
+
 	if err != nil {
+		
+	}
+
+	if err != nil {
+		switch err.Error() {
+		case "exit status 128":
+			color.GreenString("Plugin already installed")
+			addDependency = false
+			
+		default:
+			return err
+		}
+	} else {
+		addDependency = true
+	}
+	
+	
+	if addDependency && isSubdependency {
+		config.AddSubDependency(dependency)
+	} else if addDependency {
+		config.AddDependency(dependency)
+	}
+	
+	
+	subConfig, err := pkg.GetPluginConfig(currentPath, dependency)
+	if err != nil {
+		fmt.Println(err)
 		return err
 	}
 	
-	config.AddDependency(dependency)
-	
+	// Iterate over dependencies and install them if needed
+	for _, dep := range subConfig.Dependencies {
+		fmt.Println(dep)
+		if !config.HasDependency(dep) && !config.HasSubDependency(dep) {
+			installDependency(config, currentPath, dep, true)
+		}
+	}
+
 	return nil
 }
