@@ -41,7 +41,12 @@ func update(ctx *cli.Context) error {
 		return err
 	}
 
+	loading := true
+	go pkg.PlayLoadingAnim(&loading)
 	updateAllDependencies(config, newPath)
+	loading = false
+
+	pkg.PrintDone()
 
 	return nil
 }
