@@ -43,6 +43,10 @@ func install(ctx *cli.Context) error {
 
 	repo := ctx.Args().Get(0)
 	if len(repo) > 0 {
+		if config.HasDependency(repo) {
+			alreadyInstalled(repo)
+			return nil
+		}
 		installDependency(config, newPath, repo, false)
 	} else {
 		installAllDependencies(config, newPath)
@@ -52,37 +56,38 @@ func install(ctx *cli.Context) error {
 }
 
 func installAllDependencies(config pkg.PpmConfig, currentPath string) error {
+	loading := true
+	go pkg.PlayLoadingAnim(&loading)
 	for _, dependency := range config.Dependencies {
+		fmt.Printf("\rInstalling %s\n", color.YellowString(dependency))
 		dependency, version := pkg.GetVersionOrNot(dependency)
 		err := pkg.Clone(currentPath, dependency, version)
 		if err != nil {
+			installError(dependency)
 			return err
 		}
 	}
+	pkg.PrintDone()
+	loading = false
 	return nil
 }
 
 func installDependency(config pkg.PpmConfig, currentPath string, dependency string, isSubdependency bool) error {
 	dependency, version := pkg.GetVersionOrNot(dependency)
-	
+	fmt.Printf("Installing %s\n", color.YellowString(dependency))
+	loading := true
+
+	go pkg.PlayLoadingAnim(&loading)
 	err := pkg.Clone(currentPath, dependency, version)
+	loading = false
 
 	var addDependency bool
 
 	if err != nil {
-		
-	}
-
-	if err != nil {
-		switch err.Error() {
-		case "exit status 128":
-			color.GreenString("Plugin already installed")
-			addDependency = false
-			
-		default:
-			return err
-		}
+		installError(dependency)
+		return err
 	} else {
+		pkg.PrintDone()
 		addDependency = true
 	}
 	
@@ -102,11 +107,18 @@ func installDependency(config pkg.PpmConfig, currentPath string, dependency stri
 	
 	// Iterate over dependencies and install them if needed
 	for _, dep := range subConfig.Dependencies {
-		fmt.Println(dep)
 		if !config.HasDependency(dep) && !config.HasSubDependency(dep) {
 			installDependency(config, currentPath, dep, true)
 		}
 	}
 
 	return nil
+}
+
+func alreadyInstalled(dependency string) {
+	fmt.Println(color.GreenString("The Plugin"), color.YellowString(dependency), color.GreenString("is already installed"))
+}
+
+func installError(dependency string) {
+	fmt.Printf(color.RedString("\rSome issues occured while trying to install %s"), color.YellowString(dependency))
 }
