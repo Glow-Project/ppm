@@ -7,22 +7,29 @@ func Commands() []*cli.Command {
 		{
 			Name: "install",
 			Aliases: []string{"i"},
-			Usage: "Install a certain plugin or dependencies",
+			Usage: "install a certain plugin or dependencies",
 			Action: install,
 		},
 		{
 			Name: "uninstall",
-			Usage: "Uninstall a certain plugin or dependencies",
+			Usage: "uninstall a certain plugin or dependencies",
 			Action: uninstall,
+			Flags: []cli.Flag{
+				&cli.BoolFlag{
+					Name: "hard",
+					Value: false,
+					Usage: "remove dependencies from config - Can't be un-done",
+				},
+			},
 		},
 		{
 			Name: "init",
-			Usage: "Initialize a ppm.json file",
+			Usage: "initialize a ppm.json file",
 			Action: initialize,
 		},
 		{
 			Name: "update",
-			Usage: "Update all dependencies",
+			Usage: "update all dependencies",
 			Action: update,
 		},
 	}
