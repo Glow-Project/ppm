@@ -89,5 +89,14 @@ func PlayLoadingAnim(loading *bool) {
 }
 
 func PrintDone() {
-	fmt.Print(color.GreenString("\rDone"))
+	fmt.Print(color.GreenString("\rDone\n"))
+}
+
+func GetPluginName(name string) string {
+	if strings.HasPrefix(name, "https://") {
+		urlParts := strings.Split(name, "/")
+		return urlParts[len(urlParts) - 1]
+	} else {
+		return name
+	}
 }
