@@ -62,6 +62,10 @@ func (ppm PpmConfig) HasSubDependency(dependency string) bool {
 	return StringSliceContains(dependency, ppm.SubDependencies)
 }
 
+func (ppm PpmConfig) PrettyPrint() {
+	fmt.Printf("Is Plugin: %t\nDependencies: %v\nSub-dependencies: %v", ppm.Plugin, ppm.Dependencies, ppm.SubDependencies)
+}
+
 // Write the current state of the configuartion to the config file
 func (ppm PpmConfig) write() error {
 	currentPath, err := os.Getwd()

@@ -32,5 +32,10 @@ func Commands() []*cli.Command {
 			Usage: "update all dependencies",
 			Action: update,
 		},
+		{
+			Name: "show",
+			Usage: "Show the config",
+			Action: showConfig,
+		},
 	}
 }
