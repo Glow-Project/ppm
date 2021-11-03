@@ -25,9 +25,6 @@ jobs:
             go-os: windows
             os-name: windows_64bit
 
-          - go-arch: 386
-            go-os: darwin
-            os-name: darwin_32bit
           - go-arch: amd64
             go-os: darwin
             os-name: darwin_64bit
