@@ -2,7 +2,8 @@ name: Compile binaries
 
 on:
   release:
-    types: [created]
+    types:
+      - published
 
 jobs:
   build:
