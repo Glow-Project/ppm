@@ -1,0 +1,57 @@
+name: Compile binaries
+
+on:
+  release:
+    types: [created]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - go-arch: amd64
+            go-os: linux
+            os-name: linux_64bit
+          - go-arch: 386
+            go-os: linux
+            os-name: linux_32bit
+
+          - go-arch: 386
+            go-os: windows
+            os-name: windows_32bit
+          - go-arch: amd64
+            go-os: windows
+            os-name: windows_64bit
+
+          - go-arch: 386
+            go-os: darwin
+            os-name: darwin_32bit
+          - go-arch: amd64
+            go-os: darwin
+            os-name: darwin_64bit
+          - go-arch: arm64
+            go-os: darwin
+            os-name: darwin_m1
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install Go
+        uses: actions/setup-go@v2
+
+      - name: Compile to ${{ matrix.os-name }}
+        env:
+          GOARCH: ${{ matrix.go-arch }}
+          GOOS: ${{ matrix.go-os }}
+        run: |
+        if [[ ${{ matrix.os-name }} == windows* ]]; then
+          go build -o ./build/ppm_${{ matrix.os-name }}.exe
+        else
+          go build -o ./build/ppm_${{ matrix.os-name }}
+        fi
+
+      - uses: AButler/upload-release-assets@v2.0
+        with:
+          files: "build/*"
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
