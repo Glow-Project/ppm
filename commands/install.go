@@ -75,11 +75,11 @@ func installDependency(config pkg.PpmConfig, currentPath string, dependency stri
 	} else {
 		fmt.Printf("\r\t -> installing %s\n", color.YellowString(pkg.GetPluginName(dependency)))
 	}
-	loading := true
+	loading := make(chan interface{}, 1)
 
-	go pkg.PlayLoadingAnim(&loading)
+	go pkg.PlayLoadingAnim(loading)
 	err := pkg.Clone(currentPath, dependency, version)
-	loading = false
+	loading<-nil
 
 	var addDependency bool
 
