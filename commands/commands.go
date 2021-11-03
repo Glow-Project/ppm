@@ -5,36 +5,36 @@ import "github.com/urfave/cli/v2"
 func Commands() []*cli.Command {
 	return []*cli.Command{
 		{
-			Name: "install",
+			Name:    "install",
 			Aliases: []string{"i"},
-			Usage: "install a certain plugin or dependencies",
-			Action: install,
+			Usage:   "install a certain plugin or dependencies",
+			Action:  install,
 		},
 		{
-			Name: "uninstall",
-			Usage: "uninstall a certain plugin or dependencies",
+			Name:   "uninstall",
+			Usage:  "uninstall a certain plugin or dependencies",
 			Action: uninstall,
 			Flags: []cli.Flag{
 				&cli.BoolFlag{
-					Name: "hard",
+					Name:  "hard",
 					Value: false,
 					Usage: "remove dependencies from config - Can't be un-done",
 				},
 			},
 		},
 		{
-			Name: "init",
-			Usage: "initialize a ppm.json file",
+			Name:   "init",
+			Usage:  "initialize a ppm.json file",
 			Action: initialize,
 		},
 		{
-			Name: "update",
-			Usage: "update all dependencies",
+			Name:   "update",
+			Usage:  "update all dependencies",
 			Action: update,
 		},
 		{
-			Name: "show",
-			Usage: "Show the config",
+			Name:   "show",
+			Usage:  "Show the config",
 			Action: showConfig,
 		},
 	}

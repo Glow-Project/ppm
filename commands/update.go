@@ -44,7 +44,7 @@ func update(ctx *cli.Context) error {
 	loading := make(chan interface{}, 1)
 	go pkg.PlayLoadingAnim(loading)
 	updateAllDependencies(config, newPath)
-	loading<-nil
+	loading <- nil
 
 	pkg.PrintDone()
 

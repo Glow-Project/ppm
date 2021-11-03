@@ -26,7 +26,7 @@ func Clone(path string, repoName string, version string) error {
 
 // Update a certain repository
 func Update(path string) error {
-	return runGitCommand(exec.Command("git", "pull") ,path)
+	return runGitCommand(exec.Command("git", "pull"), path)
 }
 
 func runGitCommand(command *exec.Cmd, path string) error {

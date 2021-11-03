@@ -44,9 +44,9 @@ func install(ctx *cli.Context) error {
 
 	dependencies := ctx.Args()
 	if dependencies.Len() > 0 {
-		for i:=0; i<dependencies.Len(); i++ {	
+		for i := 0; i < dependencies.Len(); i++ {
 			repo := dependencies.Get(i)
-			
+
 			if config.HasDependency(repo) {
 				alreadyInstalled(repo)
 			} else {
@@ -79,7 +79,7 @@ func installDependency(config pkg.PpmConfig, currentPath string, dependency stri
 
 	go pkg.PlayLoadingAnim(loading)
 	err := pkg.Clone(currentPath, dependency, version)
-	loading<-nil
+	loading <- nil
 
 	var addDependency bool
 
@@ -94,20 +94,18 @@ func installDependency(config pkg.PpmConfig, currentPath string, dependency stri
 	} else if !config.HasDependency(dependency) && !config.HasSubDependency(dependency) {
 		addDependency = true
 	}
-	
-	
+
 	if addDependency && isSubDependency {
 		config.AddSubDependency(dependency)
 	} else if addDependency {
 		config.AddDependency(dependency)
 	}
-	
-	
+
 	subConfig, err := pkg.GetPluginConfig(currentPath, dependency)
 	if err != nil {
 		if !isSubDependency {
 			pkg.PrintDone()
-		}	
+		}
 		return nil
 	}
 

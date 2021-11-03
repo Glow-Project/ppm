@@ -26,7 +26,7 @@ func uninstall(ctx *cli.Context) error {
 
 	dependencies := ctx.Args()
 	if len(dependencies.First()) > 0 {
-		for i:=0; i<dependencies.Len(); i++ {
+		for i := 0; i < dependencies.Len(); i++ {
 			dep := dependencies.Get(i)
 			if !config.HasDependency(dep) && !config.HasSubDependency(dep) {
 				fmt.Println(color.RedString("the plugin"), color.YellowString(dep), color.RedString("is not installed"))
@@ -35,7 +35,7 @@ func uninstall(ctx *cli.Context) error {
 			}
 
 		}
-	
+
 	} else {
 		uninstallAllDependencies(config, currentPath, ctx.Bool("hard"))
 	}
@@ -52,12 +52,12 @@ func uninstallAllDependencies(config pkg.PpmConfig, currentPath string, hard boo
 	if err != nil {
 		return err
 	}
-	
+
 	if hard {
 		config.RemoveAllDependencies()
 	}
 
-	loading<-nil
+	loading <- nil
 	pkg.PrintDone()
 	return nil
 }
@@ -74,7 +74,7 @@ func uninstallDependency(config *pkg.PpmConfig, currentPath string, dependency s
 
 	subConfig, err := pkg.GetPluginConfig(path.Join(currentPath, "addons"), dep)
 	if err == nil {
-		for i:=0; i<len(subConfig.Dependencies); i++ {
+		for i := 0; i < len(subConfig.Dependencies); i++ {
 			subDep := subConfig.Dependencies[i]
 			if !config.HasDependency(subDep) {
 				uninstallDependency(config, currentPath, subDep, true)
@@ -84,11 +84,11 @@ func uninstallDependency(config *pkg.PpmConfig, currentPath string, dependency s
 
 	// path: root/addons/dependency
 	err = os.RemoveAll(path.Join(currentPath, "addons", dep))
-	loading<-nil
+	loading <- nil
 	if err != nil {
 		return err
 	}
-	
+
 	if !isSubDependency {
 		config.RemoveDependency(dep)
 	} else {

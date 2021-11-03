@@ -13,10 +13,10 @@ import (
 
 // Representing a ppm.json configuration file
 type PpmConfig struct {
-	Plugin       bool     `json:"plugin"`
-	Dependencies []string `json:"dependencies"`
+	Plugin          bool     `json:"plugin"`
+	Dependencies    []string `json:"dependencies"`
 	SubDependencies []string `json:"sub-dependencies"`
-	filePath string
+	filePath        string
 }
 
 // Add an item safely to the Dependencies property
@@ -84,7 +84,7 @@ func (ppm PpmConfig) write() error {
 		os.Chdir(currentPath)
 		return err
 	}
-	
+
 	os.Chdir(currentPath)
 
 	return nil
@@ -104,7 +104,7 @@ func ParsePpmConfig(filePath string) (PpmConfig, error) {
 		return PpmConfig{}, err
 	}
 
-	config := PpmConfig {}
+	config := PpmConfig{}
 	json.Unmarshal([]byte(content), &config)
 	config.filePath = filePath
 
@@ -116,11 +116,11 @@ func CreateNewPpmConfig(path string) error {
 	configPath := filepath.Join(path, "ppm.json")
 
 	fileExists, _ := DoesPathExist(configPath)
-	
+
 	if fileExists {
 		return errors.New("file already exists")
 	}
-	
+
 	var plugin bool
 
 	if strings.HasSuffix(filepath.Dir(path), "addons") {
@@ -130,25 +130,24 @@ func CreateNewPpmConfig(path string) error {
 	}
 
 	config := PpmConfig{
-		Plugin: plugin,
-		Dependencies: []string{},
+		Plugin:          plugin,
+		Dependencies:    []string{},
 		SubDependencies: []string{},
 	}
 
 	content, err := json.MarshalIndent(config, "", " ")
 	if err != nil {
-		
+
 		return err
 	}
-	
+
 	file, err := os.Create(filepath.Join(path, "ppm.json"))
 	if err != nil {
 		return err
 	}
 
-	
 	_, err = file.Write(content)
-	
+
 	return err
 }
 
@@ -156,10 +155,10 @@ func GetPluginConfig(dirPath string, dependency string) (PpmConfig, error) {
 	tmp := strings.Split(dependency, "/")
 	var dependencyName string
 
-	if tmp[len(tmp) - 1] != "/" {
-		dependencyName = tmp[len(tmp) - 1]
+	if tmp[len(tmp)-1] != "/" {
+		dependencyName = tmp[len(tmp)-1]
 	} else {
-		dependencyName = tmp[len(tmp) - 2]
+		dependencyName = tmp[len(tmp)-2]
 	}
 
 	config, err := ParsePpmConfig(path.Join(dirPath, dependencyName, "ppm.json"))
