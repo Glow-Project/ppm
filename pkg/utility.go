@@ -72,19 +72,25 @@ func GetVersionOrNot(dependency string) (string, string) {
 	return dependencyName, version
 }
 
-func PlayLoadingAnim(loading *bool) {
+func PlayLoadingAnim(loading chan interface{}) {
 	animStates := []string{"|", "/", "-", "\\", "|"}
 	index := 0
 
-	for *loading {
-		fmt.Printf("\r%s", animStates[index])
+	for {
+		select {
+		case <-loading:
+			return
+		default:
+			fmt.Printf("\r%s", animStates[index])
 		
-		if index == len(animStates)-1 {
-			index = 0
-		} else {
-			index++
+			if index == len(animStates)-1 {
+				index = 0
+			} else {
+				index++
+			}
+			time.Sleep(time.Second/10)
 		}
-		time.Sleep(time.Second/10)
+		
 	}
 }
 

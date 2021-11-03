@@ -44,8 +44,8 @@ func uninstall(ctx *cli.Context) error {
 }
 
 func uninstallAllDependencies(config pkg.PpmConfig, currentPath string, hard bool) error {
-	loading := true
-	go pkg.PlayLoadingAnim(&loading)
+	loading := make(chan interface{}, 1)
+	go pkg.PlayLoadingAnim(loading)
 
 	// path: root/addons
 	err := os.RemoveAll(path.Join(currentPath, "addons"))
@@ -57,7 +57,7 @@ func uninstallAllDependencies(config pkg.PpmConfig, currentPath string, hard boo
 		config.RemoveAllDependencies()
 	}
 
-	loading = false
+	loading<-nil
 	pkg.PrintDone()
 	return nil
 }
@@ -69,8 +69,8 @@ func uninstallDependency(config *pkg.PpmConfig, currentPath string, dependency s
 	} else {
 		fmt.Println("\t -> uninstalling", color.YellowString(dep))
 	}
-	loading := true
-	go pkg.PlayLoadingAnim(&loading)
+	loading := make(chan interface{}, 1)
+	go pkg.PlayLoadingAnim(loading)
 
 	subConfig, err := pkg.GetPluginConfig(path.Join(currentPath, "addons"), dep)
 	if err == nil {
@@ -84,7 +84,7 @@ func uninstallDependency(config *pkg.PpmConfig, currentPath string, dependency s
 
 	// path: root/addons/dependency
 	err = os.RemoveAll(path.Join(currentPath, "addons", dep))
-	loading = false
+	loading<-nil
 	if err != nil {
 		return err
 	}
