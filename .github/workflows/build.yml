@@ -41,15 +41,18 @@ jobs:
         uses: actions/setup-go@v2
 
       - name: Compile to ${{ matrix.os-name }}
+        if: ${{ startsWith(matrix.os-name, 'windows') }}
         env:
           GOARCH: ${{ matrix.go-arch }}
           GOOS: ${{ matrix.go-os }}
-        run: |
-        if [[ ${{ matrix.os-name }} == windows* ]]; then
-          go build -o ./build/ppm_${{ matrix.os-name }}.exe
-        else
-          go build -o ./build/ppm_${{ matrix.os-name }}
-        fi
+        run: go build -o ./build/ppm_${{ matrix.os-name }}.exe
+
+      - name: Compile to ${{ matrix.os-name }}
+        if: ${{ !startsWith(matrix.os-name, 'windows') }}
+        env:
+          GOARCH: ${{ matrix.go-arch }}
+          GOOS: ${{ matrix.go-os }}
+        run: go build -o ./build/ppm_${{ matrix.os-name }}
 
       - uses: AButler/upload-release-assets@v2.0
         with:
