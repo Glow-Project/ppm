@@ -2,9 +2,10 @@ package pkg
 
 import (
 	"fmt"
-	"os"
-	"os/exec"
+	"path/filepath"
 	"strings"
+
+	git "github.com/go-git/go-git/v5"
 )
 
 // Clone a certain github repository into a certain folder
@@ -18,33 +19,36 @@ func Clone(path string, repoName string, version string) error {
 
 	if len(version) != 0 {
 		repository = fmt.Sprintf("%s.git", repository)
-		return runGitCommand(exec.Command("git", "clone", repository, "-b", version), path)
+
+		//! Add versions
+		//! Clone certain tag
+		_, err := git.PlainClone(filepath.Join(path, repoName), false, &git.CloneOptions{
+			URL: repository,
+		})
+
+		return err
 	}
 
-	return runGitCommand(exec.Command("git", "clone", repository), path)
+	_, err := git.PlainClone(filepath.Join(path, repoName), false, &git.CloneOptions{
+		URL: repository,
+	})
+
+	return err
 }
 
 // Update a certain repository
 func Update(path string) error {
-	return runGitCommand(exec.Command("git", "pull"), path)
-}
-
-func runGitCommand(command *exec.Cmd, path string) error {
-	currentPath, err := os.Getwd()
+	repo, err := git.PlainOpen(path)
 	if err != nil {
 		return err
 	}
 
-	err = os.Chdir(path)
+	w, err := repo.Worktree()
 	if err != nil {
 		return err
 	}
 
-	if err := command.Run(); err != nil {
-		return err
-	}
-
-	err = os.Chdir(currentPath)
+	err = w.Pull(&git.PullOptions{})
 	if err != nil {
 		return err
 	}

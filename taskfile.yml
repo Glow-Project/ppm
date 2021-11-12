@@ -7,3 +7,6 @@ tasks:
   i:
     cmds:
       - task: install
+  tidy:
+    cmds:
+      - go mod tidy
