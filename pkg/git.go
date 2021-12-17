@@ -2,6 +2,8 @@ package pkg
 
 import (
 	"fmt"
+	"net/url"
+	otherPath "path"
 	"path/filepath"
 	"strings"
 
@@ -18,12 +20,19 @@ func Clone(path string, repoName string, version string) error {
 	}
 
 	if len(version) != 0 {
-		repository = fmt.Sprintf("%s.git", repository)
+		// repository = fmt.Sprintf("%s.git", repository)
 
 		//! Add versions
 		//! Clone certain tag
-		_, err := git.PlainClone(filepath.Join(path, repoName), false, &git.CloneOptions{
-			URL: repository,
+		uri, err := url.Parse(repository)
+		if err != nil {
+			return nil
+		}
+
+		uri.Path = otherPath.Join(uri.Path, "tree", version)
+		fmt.Println(uri.String())
+		_, err = git.PlainClone(filepath.Join(path, repoName), false, &git.CloneOptions{
+			URL: uri.String(),
 		})
 
 		return err
