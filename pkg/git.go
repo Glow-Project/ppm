@@ -22,8 +22,8 @@ func Clone(path string, repoName string, version string) error {
 	if len(version) != 0 {
 		// repository = fmt.Sprintf("%s.git", repository)
 
-		//! Add versions
 		//! Clone certain tag
+		//! Add versions
 		uri, err := url.Parse(repository)
 		if err != nil {
 			return nil
