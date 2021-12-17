@@ -50,7 +50,9 @@ func install(ctx *cli.Context) error {
 			if config.HasDependency(repo) {
 				alreadyInstalled(repo)
 			} else {
-				installDependency(config, newPath, repo, false)
+				if err = installDependency(config, newPath, repo, false); err != nil {
+					return err
+				}
 			}
 		}
 	} else {
