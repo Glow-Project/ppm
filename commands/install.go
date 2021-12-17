@@ -62,7 +62,9 @@ func install(ctx *cli.Context) error {
 
 func installAllDependencies(config pkg.PpmConfig, currentPath string) error {
 	for _, dependency := range config.Dependencies {
-		installDependency(config, currentPath, dependency, false)
+		if err := installDependency(config, currentPath, dependency, false); err != nil {
+			return err
+		}
 	}
 	pkg.PrintDone()
 	return nil
