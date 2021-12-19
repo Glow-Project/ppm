@@ -50,27 +50,19 @@ $ ppm -h
 
 ## Installation
 
+### Main way
+
+Download the binary from the [**release page**](https://github.com/Glow-Project/ppm/releases)
+
+### Installation from Source
+
 ```bash
 $ git clone https://github.com/Glow-Project/ppm
-
-$ go mod download
 
 $ go install
 ```
 
-## Manual installation
-
-### Windows:
-
-- Download the binary
-- Move binary to a directory that is part of the `$PATH` variable
-
-### Mac/Linux:
-
-- Download the binary
-- Move binary to `/usr/local/bin`
-
 ## Requirements
 
 - [**Git**](https://git-scm.com/) _Only needed with [v1.0.1](https://github.com/Glow-Project/ppm/releases/tag/1.0.1) or lower_
-- [**Golang**](https://golang.org/) _Only needed for manual installation_
+- [**Golang**](https://golang.org/) _Only needed for installation from source_
