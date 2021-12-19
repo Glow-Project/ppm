@@ -28,9 +28,6 @@ jobs:
           - go-arch: amd64
             go-os: darwin
             os-name: darwin_64bit
-          - go-arch: arm64
-            go-os: darwin
-            os-name: darwin_m1
 
     steps:
       - uses: actions/checkout@v2
