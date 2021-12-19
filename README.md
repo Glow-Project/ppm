@@ -72,5 +72,5 @@ $ go install
 
 ## Requirements
 
-- [Git](https://git-scm.com/)
-- [Golang](https://golang.org/)
+- [**Git**](https://git-scm.com/) _Only needed with [v1.0.1](https://github.com/Glow-Project/ppm/releases/tag/1.0.1) or lower_
+- [**Golang**](https://golang.org/)

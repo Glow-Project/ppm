@@ -88,7 +88,7 @@ func installDependency(config pkg.PpmConfig, currentPath string, dependency stri
 	var addDependency bool
 
 	if err != nil {
-		if err.Error() == "exit status 128" {
+		if err.Error() == "repository already exists" {
 			alreadyInstalled(dependency)
 			return nil
 		} else {
@@ -132,5 +132,5 @@ func alreadyInstalled(dependency string) {
 }
 
 func installError(dependency string) {
-	fmt.Printf(color.RedString("\rsome issues occured while trying to install %s\n"), color.YellowString(dependency))
+	fmt.Printf(color.RedString("\rsome issues occured while trying to install %s, %s"), color.YellowString(dependency), color.RedString("are you sure you spelled it right?\n"))
 }

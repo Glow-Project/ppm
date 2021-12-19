@@ -14,7 +14,7 @@ func main() {
 		Usage:                "Pour Entertainment package manager for Godot",
 		EnableBashCompletion: true,
 		Commands:             commands.Commands(),
-		Version:              "v1.0.1",
+		Version:              "v1.1.0",
 	}
 
 	if err := app.Run(os.Args); err != nil {
