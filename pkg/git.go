@@ -3,7 +3,6 @@ package pkg
 import (
 	"fmt"
 	"net/url"
-	otherPath "path"
 	"path/filepath"
 	"strings"
 
@@ -15,10 +14,13 @@ func Clone(path string, repoName string, version string) error {
 	var repository string
 	if strings.HasPrefix(repoName, "https://") {
 		repository = repoName
+		splitRepoName := strings.Split(repoName, "/")
+		repoName = splitRepoName[len(splitRepoName)-1]
 	} else {
 		repository = fmt.Sprintf("https://github.com/Glow-Project/%s", repoName)
 	}
 
+	// TODO: Fix installation of certain version
 	if len(version) != 0 {
 		// repository = fmt.Sprintf("%s.git", repository)
 
@@ -29,8 +31,6 @@ func Clone(path string, repoName string, version string) error {
 			return nil
 		}
 
-		uri.Path = otherPath.Join(uri.Path, "tree", version)
-		fmt.Println(uri.String())
 		_, err = git.PlainClone(filepath.Join(path, repoName), false, &git.CloneOptions{
 			URL: uri.String(),
 		})
