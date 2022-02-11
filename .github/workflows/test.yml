@@ -1,9 +1,9 @@
-name: Compile binaries
+name: Run tests
 
 on: [push]
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
 
     steps:
