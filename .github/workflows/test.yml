@@ -1,0 +1,16 @@
+name: Compile binaries
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install Go
+        uses: actions/setup-go@v2
+
+      - name: Run Tests
+        run: go test ./tests
