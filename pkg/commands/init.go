@@ -20,7 +20,7 @@ func initialize(ctx *cli.Context) error {
 		return errors.New("ppm.json config-file already exists in this directory")
 	}
 
-	fmt.Println(color.GreenString("New ppm.json config-file generated"))
+	fmt.Println(color.GreenString("new ppm.json config-file generated"))
 
 	return nil
 }
