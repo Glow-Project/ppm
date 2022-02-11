@@ -4,7 +4,8 @@
 ![badge](https://img.shields.io/github/issues/Glow-Project/ppm)
 ![badge](https://img.shields.io/github/workflow/status/Glow-Project/ppm/Run%20tests?label=tests)
 
-**Pour Package Manager** <br>
+**Pour Package Manager**
+
 Easily install and manage Godot-plugins from GitHub using the command line
 
 ## Commands
