@@ -3,8 +3,6 @@ package commands
 import (
 	"errors"
 	"fmt"
-	"os"
-	"path/filepath"
 
 	"github.com/Glow-Project/ppm/pkg/utility"
 	"github.com/fatih/color"
@@ -17,20 +15,12 @@ func install(ctx *cli.Context) error {
 		return err
 	}
 
-	config, err := utility.ParsePpmConfig(filepath.Join(paths.Root, "ppm.json"))
+	config, err := utility.ParsePpmConfig(paths.ConfigFile)
 	if err != nil {
 		return errors.New("could not find ppm.json file - try to run: ppm init")
 	}
 
-	if !config.IsPlugin {
-		pathExists, _ := utility.DoesPathExist(paths.Addons)
-		if !pathExists {
-			err := os.Mkdir(paths.Addons, 0755)
-			if err != nil {
-				return err
-			}
-		}
-	}
+	utility.CheckOrCreateDir(paths.Addons)
 
 	dependencies := ctx.Args()
 	if dependencies.Len() > 0 {

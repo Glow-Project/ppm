@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"os"
 	"path"
-	"path/filepath"
 
 	"github.com/Glow-Project/ppm/pkg/utility"
 	"github.com/fatih/color"
@@ -13,13 +12,12 @@ import (
 )
 
 func uninstall(ctx *cli.Context) error {
-	// currentPath is the root directory of the project
-	currentPath, err := os.Getwd()
+	paths, err := utility.CreatePathsFromCwd()
 	if err != nil {
 		return err
 	}
 
-	config, err := utility.ParsePpmConfig(filepath.Join(currentPath, "ppm.json"))
+	config, err := utility.ParsePpmConfig(paths.ConfigFile)
 	if err != nil {
 		return errors.New("could not find ppm.json file - try to run: ppm init")
 	}
@@ -31,24 +29,24 @@ func uninstall(ctx *cli.Context) error {
 			if !config.HasDependency(dep) && !config.HasSubDependency(dep) {
 				fmt.Println(color.RedString("the plugin"), color.YellowString(dep), color.RedString("is not installed"))
 			} else {
-				uninstallDependency(&config, currentPath, dep, false)
+				uninstallDependency(&config, paths, dep, false)
 			}
 
 		}
 
 	} else {
-		uninstallAllDependencies(config, currentPath, ctx.Bool("hard"))
+		uninstallAllDependencies(config, paths, ctx.Bool("hard"))
 	}
 
 	return nil
 }
 
-func uninstallAllDependencies(config utility.PpmConfig, currentPath string, hard bool) error {
+func uninstallAllDependencies(config utility.PpmConfig, paths utility.Paths, hard bool) error {
 	loading := make(chan interface{}, 1)
 	go utility.PlayLoadingAnim(loading)
 
 	// path: root/addons
-	err := os.RemoveAll(path.Join(currentPath, "addons"))
+	err := os.RemoveAll(paths.Addons)
 	if err != nil {
 		return err
 	}
@@ -62,7 +60,7 @@ func uninstallAllDependencies(config utility.PpmConfig, currentPath string, hard
 	return nil
 }
 
-func uninstallDependency(config *utility.PpmConfig, currentPath string, dependency string, isSubDependency bool) error {
+func uninstallDependency(config *utility.PpmConfig, paths utility.Paths, dependency string, isSubDependency bool) error {
 	dep := utility.GetPluginName(dependency)
 	if !isSubDependency {
 		fmt.Println("\runinstalling", color.YellowString(dep))
@@ -72,18 +70,18 @@ func uninstallDependency(config *utility.PpmConfig, currentPath string, dependen
 	loading := make(chan interface{}, 1)
 	go utility.PlayLoadingAnim(loading)
 
-	subConfig, err := utility.GetPluginConfig(path.Join(currentPath, "addons"), dep)
+	subConfig, err := utility.GetPluginConfig(paths.Addons, dep)
 	if err == nil {
 		for i := 0; i < len(subConfig.Dependencies); i++ {
 			subDep := subConfig.Dependencies[i]
 			if !config.HasDependency(subDep) {
-				uninstallDependency(config, currentPath, subDep, true)
+				uninstallDependency(config, paths, subDep, true)
 			}
 		}
 	}
 
 	// path: root/addons/dependency
-	err = os.RemoveAll(path.Join(currentPath, "addons", dep))
+	err = os.RemoveAll(path.Join(paths.Addons, dep))
 	loading <- nil
 	if err != nil {
 		return err

@@ -2,21 +2,18 @@ package commands
 
 import (
 	"errors"
-	"os"
-	"path/filepath"
 
 	"github.com/Glow-Project/ppm/pkg/utility"
 	"github.com/urfave/cli/v2"
 )
 
 func showConfig(ctx *cli.Context) error {
-	// currentPath is the root directory of the project
-	currentPath, err := os.Getwd()
+	paths, err := utility.CreatePathsFromCwd()
 	if err != nil {
 		return err
 	}
 
-	config, err := utility.ParsePpmConfig(filepath.Join(currentPath, "ppm.json"))
+	config, err := utility.ParsePpmConfig(paths.ConfigFile)
 	if err != nil {
 		return errors.New("could not find ppm.json file - try to run: ppm init")
 	}
