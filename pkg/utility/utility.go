@@ -1,4 +1,4 @@
-package pkg
+package utility
 
 import (
 	"fmt"
@@ -95,7 +95,7 @@ func PlayLoadingAnim(loading chan interface{}) {
 }
 
 func PrintDone() {
-	fmt.Print(color.GreenString("\rDone\n"))
+	fmt.Print(color.GreenString("\rdone\n"))
 }
 
 func GetPluginName(name string) string {

@@ -3,20 +3,19 @@ package commands
 import (
 	"errors"
 	"fmt"
-	"os"
 
-	"github.com/Glow-Project/ppm/pkg"
+	"github.com/Glow-Project/ppm/pkg/utility"
 	"github.com/fatih/color"
 	"github.com/urfave/cli/v2"
 )
 
 func initialize(ctx *cli.Context) error {
-	currentPath, err := os.Getwd()
+	paths, err := utility.CreatePathsFromCwd()
 	if err != nil {
 		return err
 	}
 
-	err = pkg.CreateNewPpmConfig(currentPath)
+	err = utility.CreateNewPpmConfig(paths.Root)
 	if err != nil {
 		return errors.New("ppm.json config-file already exists in this directory")
 	}

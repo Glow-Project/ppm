@@ -7,7 +7,7 @@ import (
 	"path"
 	"path/filepath"
 
-	"github.com/Glow-Project/ppm/pkg"
+	"github.com/Glow-Project/ppm/pkg/utility"
 	"github.com/fatih/color"
 	"github.com/urfave/cli/v2"
 )
@@ -19,7 +19,7 @@ func uninstall(ctx *cli.Context) error {
 		return err
 	}
 
-	config, err := pkg.ParsePpmConfig(filepath.Join(currentPath, "ppm.json"))
+	config, err := utility.ParsePpmConfig(filepath.Join(currentPath, "ppm.json"))
 	if err != nil {
 		return errors.New("could not find ppm.json file - try to run: ppm init")
 	}
@@ -43,9 +43,9 @@ func uninstall(ctx *cli.Context) error {
 	return nil
 }
 
-func uninstallAllDependencies(config pkg.PpmConfig, currentPath string, hard bool) error {
+func uninstallAllDependencies(config utility.PpmConfig, currentPath string, hard bool) error {
 	loading := make(chan interface{}, 1)
-	go pkg.PlayLoadingAnim(loading)
+	go utility.PlayLoadingAnim(loading)
 
 	// path: root/addons
 	err := os.RemoveAll(path.Join(currentPath, "addons"))
@@ -58,21 +58,21 @@ func uninstallAllDependencies(config pkg.PpmConfig, currentPath string, hard boo
 	}
 
 	loading <- nil
-	pkg.PrintDone()
+	utility.PrintDone()
 	return nil
 }
 
-func uninstallDependency(config *pkg.PpmConfig, currentPath string, dependency string, isSubDependency bool) error {
-	dep := pkg.GetPluginName(dependency)
+func uninstallDependency(config *utility.PpmConfig, currentPath string, dependency string, isSubDependency bool) error {
+	dep := utility.GetPluginName(dependency)
 	if !isSubDependency {
 		fmt.Println("\runinstalling", color.YellowString(dep))
 	} else {
 		fmt.Println("\t -> uninstalling", color.YellowString(dep))
 	}
 	loading := make(chan interface{}, 1)
-	go pkg.PlayLoadingAnim(loading)
+	go utility.PlayLoadingAnim(loading)
 
-	subConfig, err := pkg.GetPluginConfig(path.Join(currentPath, "addons"), dep)
+	subConfig, err := utility.GetPluginConfig(path.Join(currentPath, "addons"), dep)
 	if err == nil {
 		for i := 0; i < len(subConfig.Dependencies); i++ {
 			subDep := subConfig.Dependencies[i]
@@ -96,7 +96,7 @@ func uninstallDependency(config *pkg.PpmConfig, currentPath string, dependency s
 	}
 
 	if !isSubDependency {
-		pkg.PrintDone()
+		utility.PrintDone()
 	}
 	return nil
 }

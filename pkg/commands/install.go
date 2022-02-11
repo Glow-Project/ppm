@@ -6,40 +6,30 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/Glow-Project/ppm/pkg"
+	"github.com/Glow-Project/ppm/pkg/utility"
 	"github.com/fatih/color"
 	"github.com/urfave/cli/v2"
 )
 
 func install(ctx *cli.Context) error {
-	// currentPath is the root directory of the project
-	currentPath, err := os.Getwd()
+	paths, err := utility.CreatePathsFromCwd()
 	if err != nil {
 		return err
 	}
 
-	config, err := pkg.ParsePpmConfig(filepath.Join(currentPath, "ppm.json"))
+	config, err := utility.ParsePpmConfig(filepath.Join(paths.Root, "ppm.json"))
 	if err != nil {
 		return errors.New("could not find ppm.json file - try to run: ppm init")
 	}
 
-	if config.Plugin {
-		os.Chdir(filepath.Dir(currentPath))
-	} else {
-		addonPath := filepath.Join(currentPath, "addons")
-		pathExists, _ := pkg.DoesPathExist(addonPath)
+	if !config.IsPlugin {
+		pathExists, _ := utility.DoesPathExist(paths.Addons)
 		if !pathExists {
-			err := os.Mkdir("addons", 0755)
+			err := os.Mkdir(paths.Addons, 0755)
 			if err != nil {
 				return err
 			}
 		}
-		os.Chdir(addonPath)
-	}
-
-	newPath, err := os.Getwd()
-	if err != nil {
-		return err
 	}
 
 	dependencies := ctx.Args()
@@ -50,39 +40,39 @@ func install(ctx *cli.Context) error {
 			if config.HasDependency(repo) {
 				alreadyInstalled(repo)
 			} else {
-				if err = installDependency(config, newPath, repo, false); err != nil {
+				if err = installDependency(config, paths, repo, false); err != nil {
 					return err
 				}
 			}
 		}
 	} else {
-		installAllDependencies(config, newPath)
+		installAllDependencies(config, paths)
 	}
 
 	return nil
 }
 
-func installAllDependencies(config pkg.PpmConfig, currentPath string) error {
+func installAllDependencies(config utility.PpmConfig, paths utility.Paths) error {
 	for _, dependency := range config.Dependencies {
-		if err := installDependency(config, currentPath, dependency, false); err != nil {
+		if err := installDependency(config, paths, dependency, false); err != nil {
 			return err
 		}
 	}
-	pkg.PrintDone()
+	utility.PrintDone()
 	return nil
 }
 
-func installDependency(config pkg.PpmConfig, currentPath string, dependency string, isSubDependency bool) error {
-	dependency, version := pkg.GetVersionOrNot(dependency)
+func installDependency(config utility.PpmConfig, paths utility.Paths, dependency string, isSubDependency bool) error {
+	dependency, version := utility.GetVersionOrNot(dependency)
 	if !isSubDependency {
-		fmt.Printf("\rinstalling %s\n", color.YellowString(pkg.GetPluginName(dependency)))
+		fmt.Printf("\rinstalling %s\n", color.YellowString(utility.GetPluginName(dependency)))
 	} else {
-		fmt.Printf("\r\t -> installing %s\n", color.YellowString(pkg.GetPluginName(dependency)))
+		fmt.Printf("\r\t -> installing %s\n", color.YellowString(utility.GetPluginName(dependency)))
 	}
 	loading := make(chan interface{}, 1)
 
-	go pkg.PlayLoadingAnim(loading)
-	err := pkg.Clone(currentPath, dependency, version)
+	go utility.PlayLoadingAnim(loading)
+	err := utility.Clone(paths.Addons, dependency, version)
 	loading <- nil
 
 	var addDependency bool
@@ -105,10 +95,10 @@ func installDependency(config pkg.PpmConfig, currentPath string, dependency stri
 		config.AddDependency(dependency)
 	}
 
-	subConfig, err := pkg.GetPluginConfig(currentPath, dependency)
+	subConfig, err := utility.GetPluginConfig(paths.Addons, dependency)
 	if err != nil {
 		if !isSubDependency {
-			pkg.PrintDone()
+			utility.PrintDone()
 		}
 		return nil
 	}
@@ -116,12 +106,12 @@ func installDependency(config pkg.PpmConfig, currentPath string, dependency stri
 	// Iterate over dependencies and install them if needed
 	for _, dep := range subConfig.Dependencies {
 		if !config.HasDependency(dep) && !config.HasSubDependency(dep) {
-			installDependency(config, currentPath, dep, true)
+			installDependency(config, paths, dep, true)
 		}
 	}
 
 	if !isSubDependency {
-		pkg.PrintDone()
+		utility.PrintDone()
 	}
 
 	return nil

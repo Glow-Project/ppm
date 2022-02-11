@@ -5,7 +5,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/Glow-Project/ppm/pkg"
+	"github.com/Glow-Project/ppm/pkg/utility"
 	"github.com/urfave/cli/v2"
 )
 
@@ -16,7 +16,7 @@ func showConfig(ctx *cli.Context) error {
 		return err
 	}
 
-	config, err := pkg.ParsePpmConfig(filepath.Join(currentPath, "ppm.json"))
+	config, err := utility.ParsePpmConfig(filepath.Join(currentPath, "ppm.json"))
 	if err != nil {
 		return errors.New("could not find ppm.json file - try to run: ppm init")
 	}

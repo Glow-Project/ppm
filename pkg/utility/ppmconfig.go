@@ -1,4 +1,4 @@
-package pkg
+package utility
 
 import (
 	"encoding/json"
@@ -13,7 +13,7 @@ import (
 
 // Representing a ppm.json configuration file
 type PpmConfig struct {
-	Plugin          bool     `json:"plugin"`
+	IsPlugin        bool     `json:"plugin"`
 	Dependencies    []string `json:"dependencies"`
 	SubDependencies []string `json:"sub-dependencies"`
 	filePath        string
@@ -63,29 +63,25 @@ func (ppm PpmConfig) HasSubDependency(dependency string) bool {
 }
 
 func (ppm PpmConfig) PrettyPrint() {
-	fmt.Printf("Is Plugin: %t\nDependencies: %v\nSub-dependencies: %v", ppm.Plugin, ppm.Dependencies, ppm.SubDependencies)
+	ppmType := "game"
+	if ppm.IsPlugin {
+		ppmType = "plugin"
+	}
+
+	fmt.Printf("this is a %s\ndependencies: %v\nsubdependencies: %v", ppmType, ppm.Dependencies, ppm.SubDependencies)
 }
 
 // Write the current state of the configuartion to the config file
 func (ppm PpmConfig) write() error {
-	currentPath, err := os.Getwd()
-	if err != nil {
-		return err
-	}
-
 	content, err := json.MarshalIndent(ppm, "", " ")
 	if err != nil {
 		return err
 	}
 
-	os.Chdir(filepath.Dir(ppm.filePath))
-	err = ioutil.WriteFile("ppm.json", content, 0755)
+	err = ioutil.WriteFile(ppm.filePath, content, 0755)
 	if err != nil {
-		os.Chdir(currentPath)
 		return err
 	}
-
-	os.Chdir(currentPath)
 
 	return nil
 }
@@ -121,16 +117,16 @@ func CreateNewPpmConfig(path string) error {
 		return errors.New("file already exists")
 	}
 
-	var plugin bool
+	var isPlugin bool
 
 	if strings.HasSuffix(filepath.Dir(path), "addons") {
-		plugin = true
+		isPlugin = true
 	} else {
-		plugin = false
+		isPlugin = false
 	}
 
 	config := PpmConfig{
-		Plugin:          plugin,
+		IsPlugin:        isPlugin,
 		Dependencies:    []string{},
 		SubDependencies: []string{},
 	}

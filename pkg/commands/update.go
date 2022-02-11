@@ -5,7 +5,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/Glow-Project/ppm/pkg"
+	"github.com/Glow-Project/ppm/pkg/utility"
 	"github.com/urfave/cli/v2"
 )
 
@@ -17,16 +17,16 @@ func update(ctx *cli.Context) error {
 		return err
 	}
 
-	config, err := pkg.ParsePpmConfig(filepath.Join(currentPath, "ppm.json"))
+	config, err := utility.ParsePpmConfig(filepath.Join(currentPath, "ppm.json"))
 	if err != nil {
 		return errors.New("could not find ppm.json file - try to run: ppm init")
 	}
 
-	if config.Plugin {
+	if config.IsPlugin {
 		os.Chdir(filepath.Dir(currentPath))
 	} else {
 		addonPath := filepath.Join(currentPath, "addons")
-		pathExists, _ := pkg.DoesPathExist(addonPath)
+		pathExists, _ := utility.DoesPathExist(addonPath)
 		if !pathExists {
 			err := os.Mkdir("addons", 0755)
 			if err != nil {
@@ -42,23 +42,23 @@ func update(ctx *cli.Context) error {
 	}
 
 	loading := make(chan interface{}, 1)
-	go pkg.PlayLoadingAnim(loading)
+	go utility.PlayLoadingAnim(loading)
 	updateAllDependencies(config, newPath)
 	loading <- nil
 
-	pkg.PrintDone()
+	utility.PrintDone()
 
 	return nil
 }
 
-func updateAllDependencies(config pkg.PpmConfig, currentPath string) error {
+func updateAllDependencies(config utility.PpmConfig, currentPath string) error {
 	for _, dependency := range config.Dependencies {
-		_, version := pkg.GetVersionOrNot(dependency)
+		_, version := utility.GetVersionOrNot(dependency)
 		if len(version) > 0 {
 			continue
 		}
 
-		err := pkg.Update(filepath.Join(currentPath, dependency))
+		err := utility.Update(filepath.Join(currentPath, dependency))
 		if err != nil {
 			return err
 		}
