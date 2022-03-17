@@ -1,6 +1,7 @@
 package utility
 
 import (
+	"errors"
 	"fmt"
 	"os"
 	"strings"
@@ -105,4 +106,18 @@ func GetPluginName(name string) string {
 	} else {
 		return name
 	}
+}
+
+func GetPathsAndConfig() (Paths, PpmConfig, error) {
+	paths, err := CreatePathsFromCwd()
+	if err != nil {
+		return Paths{}, PpmConfig{}, err
+	}
+
+	config, err := ParsePpmConfig(paths.ConfigFile)
+	if err != nil {
+		return Paths{}, PpmConfig{}, errors.New("could not find ppm.json file - try to run: ppm init")
+	}
+
+	return paths, config, nil
 }
