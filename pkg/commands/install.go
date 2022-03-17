@@ -1,7 +1,6 @@
 package commands
 
 import (
-	"errors"
 	"fmt"
 
 	"github.com/Glow-Project/ppm/pkg/utility"
@@ -10,14 +9,9 @@ import (
 )
 
 func install(ctx *cli.Context) error {
-	paths, err := utility.CreatePathsFromCwd()
+	paths, config, err := utility.GetPathsAndConfig()
 	if err != nil {
 		return err
-	}
-
-	config, err := utility.ParsePpmConfig(paths.ConfigFile)
-	if err != nil {
-		return errors.New("could not find ppm.json file - try to run: ppm init")
 	}
 
 	utility.CheckOrCreateDir(paths.Addons)

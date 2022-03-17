@@ -1,7 +1,6 @@
 package commands
 
 import (
-	"errors"
 	"path/filepath"
 
 	"github.com/Glow-Project/ppm/pkg/utility"
@@ -11,14 +10,9 @@ import (
 // The update method is called by the cli
 // It updates all dependencies
 func update(ctx *cli.Context) error {
-	paths, err := utility.CreatePathsFromCwd()
+	paths, config, err := utility.GetPathsAndConfig()
 	if err != nil {
 		return err
-	}
-
-	config, err := utility.ParsePpmConfig(paths.ConfigFile)
-	if err != nil {
-		return errors.New("could not find ppm.json file - try to run: ppm init")
 	}
 
 	utility.CheckOrCreateDir(paths.Addons)

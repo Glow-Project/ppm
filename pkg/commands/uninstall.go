@@ -1,7 +1,6 @@
 package commands
 
 import (
-	"errors"
 	"fmt"
 	"os"
 	"path"
@@ -12,14 +11,9 @@ import (
 )
 
 func uninstall(ctx *cli.Context) error {
-	paths, err := utility.CreatePathsFromCwd()
+	paths, config, err := utility.GetPathsAndConfig()
 	if err != nil {
 		return err
-	}
-
-	config, err := utility.ParsePpmConfig(paths.ConfigFile)
-	if err != nil {
-		return errors.New("could not find ppm.json file - try to run: ppm init")
 	}
 
 	dependencies := ctx.Args()
