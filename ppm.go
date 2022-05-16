@@ -8,15 +8,17 @@ import (
 	"github.com/urfave/cli/v2"
 )
 
+var BuildVersion string
+
 func main() {
 	app := &cli.App{
 		Name:                 "ppm",
+		Version:              BuildVersion,
 		Usage:                "Pour Entertainment package manager for Godot",
 		EnableBashCompletion: true,
 		Commands:             commands.Commands(),
-		Version:              "v1.1.0",
+		HideVersion:          false,
 	}
-
 	if err := app.Run(os.Args); err != nil {
 		log.Fatal(err)
 	}

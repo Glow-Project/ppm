@@ -1,6 +1,9 @@
 version: "3"
 
 tasks:
+  build:
+    cmds:
+      - go build -ldflags "-X main.BuildVersion=DEVELOPMENT"
   install:
     cmds:
       - go install

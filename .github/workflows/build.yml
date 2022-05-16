@@ -1,4 +1,4 @@
-name: Compile binaries
+name: Compile and release binaries
 
 on:
   release:
@@ -40,14 +40,14 @@ jobs:
         env:
           GOARCH: ${{ matrix.go-arch }}
           GOOS: ${{ matrix.go-os }}
-        run: go build -o ./build/ppm_${{ matrix.os-name }}.exe
+        run: go build -o ./build/ppm_${{ matrix.os-name }}.exe -ldflags "-X main.BuildVersion=${{ github.event.release.tag_name }}"
 
       - name: Compile to ${{ matrix.os-name }}
         if: ${{ !startsWith(matrix.os-name, 'windows') }}
         env:
           GOARCH: ${{ matrix.go-arch }}
           GOOS: ${{ matrix.go-os }}
-        run: go build -o ./build/ppm_${{ matrix.os-name }}
+        run: go build -o ./build/ppm_${{ matrix.os-name }} -ldflags "-X main.BuildVersion=${{ github.event.release.tag_name }}"
 
       - uses: AButler/upload-release-assets@v2.0
         with:
