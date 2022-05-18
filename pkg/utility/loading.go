@@ -11,14 +11,14 @@ type LoadingVisualization struct {
 	finished        chan interface{}
 }
 
-// create and start a new LoadingVisualziation instance
+// Create and start a new LoadingVisualziation instance
 func StartLoading() *LoadingVisualization {
 	l := LoadingVisualization{}
 	l.Start()
 	return &l
 }
 
-// prepare and run the loading animation in a new goroutine
+// Prepare and run the loading animation in a new goroutine
 func (l *LoadingVisualization) Start() {
 	if l.AnimationFrames == nil {
 		l.AnimationFrames = []string{"|", "/", "-", "\\", "|"}
@@ -28,7 +28,7 @@ func (l *LoadingVisualization) Start() {
 	go l.Run(10)
 }
 
-// run the loading animation
+// Run the loading animation
 func (l *LoadingVisualization) Run(speed time.Duration) {
 	index := 0
 	for {
@@ -48,7 +48,7 @@ func (l *LoadingVisualization) Run(speed time.Duration) {
 	}
 }
 
-// stop the loading animation
+// Stop the loading animation
 func (l *LoadingVisualization) Stop() {
 	l.finished <- nil
 }
