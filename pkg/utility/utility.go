@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"os"
 	"strings"
-	"time"
 
 	"github.com/fatih/color"
 )
@@ -71,28 +70,6 @@ func GetVersionOrNot(dependency string) (string, string) {
 	dependencyName := splitDependency[0]
 
 	return dependencyName, version
-}
-
-func PlayLoadingAnim(loading chan interface{}) {
-	animStates := []string{"|", "/", "-", "\\", "|"}
-	index := 0
-
-	for {
-		select {
-		case <-loading:
-			return
-		default:
-			fmt.Printf("\r%s", animStates[index])
-
-			if index == len(animStates)-1 {
-				index = 0
-			} else {
-				index++
-			}
-			time.Sleep(time.Second / 10)
-		}
-
-	}
 }
 
 func PrintDone() {
