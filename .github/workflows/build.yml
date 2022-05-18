@@ -30,10 +30,10 @@ jobs:
             os-name: darwin_64bit
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - name: Install Go
-        uses: actions/setup-go@v2
+        uses: actions/setup-go@v3
 
       - name: Compile to ${{ matrix.os-name }}
         if: ${{ startsWith(matrix.os-name, 'windows') }}
