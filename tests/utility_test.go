@@ -56,10 +56,10 @@ func TestUtility(t *testing.T) {
 	})
 
 	t.Run("Test StringSliceContains function", func(t *testing.T) {
-		if !utility.StringSliceContains("Test", []string{"tEst", "setT", "Test"}) {
+		if !utility.SliceContains("Test", []string{"tEst", "setT", "Test"}) {
 			t.Fail()
 		}
-		if utility.StringSliceContains("Test", []string{"idka", "rhiugh", "zuroghz"}) {
+		if utility.SliceContains("Test", []string{"idka", "rhiugh", "zuroghz"}) {
 			t.Fail()
 		}
 	})
