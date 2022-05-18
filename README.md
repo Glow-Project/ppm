@@ -2,7 +2,7 @@
 
 ![badge](https://img.shields.io/github/license/Glow-Project/ppm)
 ![badge](https://img.shields.io/github/issues/Glow-Project/ppm)
-![badge](https://img.shields.io/github/workflow/status/Glow-Project/ppm/Run%20tests?label=tests)
+![badge](https://img.shields.io/github/workflow/status/Glow-Project/ppm/ci?label=ci)
 
 **Pour Package Manager**
 
