@@ -39,17 +39,17 @@ func CheckOrCreateDir(path string) error {
 }
 
 // Get the index of a certain item in a string slice
-func IndexOf(target string, data []string) int {
-	for k, v := range data {
-		if target == v {
-			return k
+func IndexOf[t comparable](target t, data []t) int {
+	for index, value := range data {
+		if target == value {
+			return index
 		}
 	}
 	return -1
 }
 
 // Check wether a certain item exists in a string slice
-func StringSliceContains(target string, data []string) bool {
+func SliceContains[t comparable](target t, data []t) bool {
 	for _, v := range data {
 		if v == target {
 			return true
@@ -97,4 +97,34 @@ func GetPathsAndConfig() (Paths, PpmConfig, error) {
 	}
 
 	return paths, config, nil
+}
+
+func SliceToString(slice []string, seperator string) string {
+	if len(slice) == 0 {
+		return "none"
+	}
+
+	str := ""
+	for _, item := range slice {
+		if len(str) != 0 {
+			str += seperator
+		}
+
+		str += item
+	}
+
+	return str
+}
+
+// Get the first predicate match of the slice
+//
+// returns nil if none of the items match
+func GetFirstMatch[t any](slice []t, predicate func(t, int) bool) *t {
+	for i, value := range slice {
+		if predicate(value, i) {
+			return &value
+		}
+	}
+
+	return nil
 }

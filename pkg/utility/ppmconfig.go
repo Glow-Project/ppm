@@ -47,19 +47,23 @@ func (ppm *PpmConfig) RemoveSubDependency(dependency string) {
 
 // Remove an item safely from the sub-dependencies property by its name
 func (ppm *PpmConfig) RemoveDependency(dependency string) {
-	index := IndexOf(dependency, ppm.Dependencies)
-	ppm.Dependencies = append(ppm.Dependencies[:index], ppm.Dependencies[index+1:]...)
+	if len(ppm.Dependencies) == 1 {
+		ppm.Dependencies = []string{}
+	} else {
+		index := IndexOf(dependency, ppm.Dependencies)
+		ppm.Dependencies = append(ppm.Dependencies[:index], ppm.Dependencies[index+1:]...)
+	}
 	ppm.write()
 }
 
 // Check wether the config file has a certain dependency
 func (ppm PpmConfig) HasDependency(dependency string) bool {
-	return StringSliceContains(dependency, ppm.Dependencies)
+	return SliceContains(dependency, ppm.Dependencies)
 }
 
 // Check wether the config file has a certain sub-dependency
 func (ppm PpmConfig) HasSubDependency(dependency string) bool {
-	return StringSliceContains(dependency, ppm.SubDependencies)
+	return SliceContains(dependency, ppm.SubDependencies)
 }
 
 func (ppm PpmConfig) PrettyPrint() {
@@ -68,7 +72,10 @@ func (ppm PpmConfig) PrettyPrint() {
 		ppmType = "plugin"
 	}
 
-	fmt.Printf("this is a %s\ndependencies: %v\nsubdependencies: %v", ppmType, ppm.Dependencies, ppm.SubDependencies)
+	dependencies := SliceToString(ppm.Dependencies, ", ")
+	subDependencies := SliceToString(ppm.SubDependencies, ", ")
+
+	fmt.Printf("this project is a %s\ndependencies: %v\nsubdependencies: %v", ppmType, dependencies, subDependencies)
 }
 
 // Write the current state of the configuartion to the config file
@@ -133,7 +140,6 @@ func CreateNewPpmConfig(path string) error {
 
 	content, err := json.MarshalIndent(config, "", " ")
 	if err != nil {
-
 		return err
 	}
 
