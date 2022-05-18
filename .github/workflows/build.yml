@@ -1,4 +1,4 @@
-name: Compile and release binaries
+name: Release binaries
 
 on:
   release:
