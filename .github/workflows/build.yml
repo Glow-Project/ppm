@@ -35,12 +35,7 @@ jobs:
       - name: Install Go
         uses: actions/setup-go@v3
         with:
-          go-version-file: "./go.mod"
-          check-latest: true
-
-      - run: |
-          export PATH=${GOROOT}/bin:$PATH
-          go version
+          go-version: "1.18"
 
       - name: Compile to ${{ matrix.os-name }}
         if: ${{ startsWith(matrix.os-name, 'windows') }}
