@@ -34,7 +34,7 @@ func Commands() []*cli.Command {
 		},
 		{
 			Name:   "show",
-			Usage:  "Show the config",
+			Usage:  "show the config",
 			Action: showConfig,
 		},
 	}
