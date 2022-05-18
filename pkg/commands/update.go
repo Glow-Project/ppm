@@ -17,10 +17,9 @@ func update(ctx *cli.Context) error {
 
 	utility.CheckOrCreateDir(paths.Addons)
 
-	loading := make(chan interface{}, 1)
-	go utility.PlayLoadingAnim(loading)
+	loadAnim := utility.StartLoading()
 	updateAllDependencies(config, paths)
-	loading <- nil
+	loadAnim.Stop()
 
 	utility.PrintDone()
 
