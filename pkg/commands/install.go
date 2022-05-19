@@ -17,26 +17,24 @@ func install(ctx *cli.Context) error {
 	utility.CheckOrCreateDir(paths.Addons)
 
 	dependencies := ctx.Args()
-	if dependencies.Len() > 0 {
-		for i := 0; i < dependencies.Len(); i++ {
-			repo := dependencies.Get(i)
+	if dependencies.Len() == 0 {
+		installAllDependencies(&config, paths)
+	}
 
-			if config.HasDependency(repo) {
-				alreadyInstalled(repo)
-			} else {
-				if err = installDependency(config, paths, repo, false); err != nil {
-					return err
-				}
-			}
+	for i := 0; i < dependencies.Len(); i++ {
+		repo := dependencies.Get(i)
+
+		if config.HasDependency(repo) {
+			alreadyInstalled(repo)
+		} else if err = installDependency(&config, paths, repo, false); err != nil {
+			return err
 		}
-	} else {
-		installAllDependencies(config, paths)
 	}
 
 	return nil
 }
 
-func installAllDependencies(config utility.PpmConfig, paths utility.Paths) error {
+func installAllDependencies(config *utility.PpmConfig, paths utility.Paths) error {
 	for _, dependency := range config.Dependencies {
 		if err := installDependency(config, paths, dependency, false); err != nil {
 			return err
@@ -46,12 +44,12 @@ func installAllDependencies(config utility.PpmConfig, paths utility.Paths) error
 	return nil
 }
 
-func installDependency(config utility.PpmConfig, paths utility.Paths, dependency string, isSubDependency bool) error {
+func installDependency(config *utility.PpmConfig, paths utility.Paths, dependency string, isSubDependency bool) error {
 	dependency, version := utility.GetVersionOrNot(dependency)
 	if !isSubDependency {
 		fmt.Printf("\rinstalling %s\n", color.YellowString(utility.GetPluginName(dependency)))
 	} else {
-		fmt.Printf("\r\t -> installing %s\n", color.YellowString(utility.GetPluginName(dependency)))
+		fmt.Printf("\t -> installing %s\n", color.YellowString(utility.GetPluginName(dependency)))
 	}
 	loadAnim := utility.StartLoading()
 
@@ -68,9 +66,9 @@ func installDependency(config utility.PpmConfig, paths utility.Paths, dependency
 			installError(dependency)
 			return err
 		}
-	} else if !config.HasDependency(dependency) && !config.HasSubDependency(dependency) {
-		addDependency = true
 	}
+
+	addDependency = (!isSubDependency && !config.HasDependency(dependency)) || (isSubDependency && !config.HasSubDependency(dependency))
 
 	if addDependency && isSubDependency {
 		config.AddSubDependency(dependency)
@@ -88,7 +86,7 @@ func installDependency(config utility.PpmConfig, paths utility.Paths, dependency
 
 	// Iterate over dependencies and install them if needed
 	for _, dep := range subConfig.Dependencies {
-		if !config.HasDependency(dep) && !config.HasSubDependency(dep) {
+		if !config.HasSubDependency(dep) {
 			installDependency(config, paths, dep, true)
 		}
 	}
