@@ -23,6 +23,12 @@ func Commands() []*cli.Command {
 			},
 		},
 		{
+			Name:    "reinstall",
+			Aliases: []string{"ri"},
+			Usage:   "reinstall all dependencies",
+			Action:  reinstall,
+		},
+		{
 			Name:   "init",
 			Usage:  "initialize a ppm.json file",
 			Action: initialize,
