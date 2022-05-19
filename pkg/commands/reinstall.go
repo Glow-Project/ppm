@@ -2,7 +2,7 @@ package commands
 
 import (
 	"github.com/Glow-Project/ppm/pkg/utility"
-	"github.com/urfave/cli"
+	"github.com/urfave/cli/v2"
 )
 
 func reinstall(ctx *cli.Context) error {
