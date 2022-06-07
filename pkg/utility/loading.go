@@ -8,7 +8,7 @@ import (
 type LoadingVisualization struct {
 	Active          bool
 	AnimationFrames []string
-	finished        chan interface{}
+	finished        chan any
 }
 
 // Create and start a new LoadingVisualziation instance
@@ -23,7 +23,7 @@ func (l *LoadingVisualization) Start() {
 	if l.AnimationFrames == nil {
 		l.AnimationFrames = []string{"|", "/", "-", "\\", "|"}
 	}
-	l.finished = make(chan interface{})
+	l.finished = make(chan any)
 
 	go l.Run(10)
 }
