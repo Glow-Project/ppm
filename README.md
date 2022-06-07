@@ -1,9 +1,12 @@
 <div align="center">
     <img src="./logo.png" alt=">ppm">
     <br>
+    <br>
     <img src="https://img.shields.io/github/license/Glow-Project/ppm" alt="badge">
     <img src="https://img.shields.io/github/issues/Glow-Project/ppm" alt="badge">
     <img src="https://img.shields.io/github/workflow/status/Glow-Project/ppm/ci?label=ci" alt="badge">
+    <br>
+    <br>
     <br>
 </div>
 
