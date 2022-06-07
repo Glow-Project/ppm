@@ -1,8 +1,11 @@
-# ppm
-
-![badge](https://img.shields.io/github/license/Glow-Project/ppm)
-![badge](https://img.shields.io/github/issues/Glow-Project/ppm)
-![badge](https://img.shields.io/github/workflow/status/Glow-Project/ppm/ci?label=ci)
+<div align="center">
+    <img src="./Group 7(1).png" alt=">ppm">
+    <br>
+    <img src="https://img.shields.io/github/license/Glow-Project/ppm" alt="badge">
+    <img src="https://img.shields.io/github/issues/Glow-Project/ppm" alt="badge">
+    <img src="https://img.shields.io/github/workflow/status/Glow-Project/ppm/ci?label=ci" alt="badge">
+    <br>
+</div>
 
 **Pour Package Manager**
 
