@@ -1,5 +1,5 @@
 <div align="center">
-    <img src="./Group 7(1).png" alt=">ppm">
+    <img src="./logo.png" alt=">ppm">
     <br>
     <img src="https://img.shields.io/github/license/Glow-Project/ppm" alt="badge">
     <img src="https://img.shields.io/github/issues/Glow-Project/ppm" alt="badge">
