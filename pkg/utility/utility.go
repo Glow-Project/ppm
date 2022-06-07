@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"os"
+	"regexp"
 	"strings"
 
 	"github.com/fatih/color"
@@ -127,4 +128,19 @@ func GetFirstMatch[t any](slice []t, predicate func(t, int) bool) *t {
 	}
 
 	return nil
+}
+
+func IsUrl(str string) bool {
+	a, _ := regexp.Match(`https?:\/\/[a-zA-Z0-9_\-\.]+\.[a-zA-Z]{1,5}(\/[a-zA-Z0-9_\-\=\&\?\:]+)+`, []byte(str))
+	return a
+}
+
+func IsGithubRepoUrl(str string) bool {
+	a, _ := regexp.Match(`https?:\/\/github\.com(\/[a-zA-Z0-9_\-\=\&\?\:]+){2}`, []byte(str))
+	return a
+}
+
+func IsUserAndRepo(str string) bool {
+	a, _ := regexp.Match(`[a-zA-Z0-9_\-]+\/[a-zA-Z0-9_\-]+`, []byte(str))
+	return a
 }

@@ -1,6 +1,7 @@
 package utility
 
 import (
+	"errors"
 	"fmt"
 	"path/filepath"
 	"strings"
@@ -10,16 +11,26 @@ import (
 
 // Clone a certain github repository into a certain folder
 func Clone(path string, repoName string, version string) error {
+	// The clonable name of the repository
 	var repository string
-	if strings.HasPrefix(repoName, "https://") {
+	// The name of the repository
+	var name string
+
+	if IsUrl(repoName) {
 		repository = repoName
-		splitRepoName := strings.Split(repoName, "/")
-		repoName = splitRepoName[len(splitRepoName)-1]
+		tmp := strings.Split(repository, "/")
+		name = tmp[len(tmp)-1]
+	} else if IsUserAndRepo(repoName) {
+		repository = fmt.Sprintf("https://github.com/%s", repoName)
+		tmp := strings.Split(repoName, "/")
+		name = tmp[1]
 	} else {
-		repository = fmt.Sprintf("https://github.com/Glow-Project/%s", repoName)
+		// TODO: add godot asset library support
+		// name = repoName
+		return errors.New("godot asset library not supported yet")
 	}
 
-	_, err := git.PlainClone(filepath.Join(path, repoName), false, &git.CloneOptions{
+	_, err := git.PlainClone(filepath.Join(path, name), false, &git.CloneOptions{
 		URL: repository,
 	})
 
