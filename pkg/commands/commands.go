@@ -43,5 +43,10 @@ func Commands() []*cli.Command {
 			Usage:  "show the config",
 			Action: showConfig,
 		},
+		{
+			Name:   "tidy",
+			Usage:  "tidy the config",
+			Action: tidy,
+		},
 	}
 }

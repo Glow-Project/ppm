@@ -22,27 +22,27 @@ type PpmConfig struct {
 // Add an item safely to the Dependencies property
 func (ppm *PpmConfig) AddDependency(dependency string) {
 	ppm.Dependencies = append(ppm.Dependencies, dependency)
-	ppm.write()
+	ppm.Write()
 }
 
 // Add an item safely to the sub-dependencies property
 func (ppm *PpmConfig) AddSubDependency(dependency string) {
 	ppm.SubDependencies = append(ppm.SubDependencies, dependency)
-	ppm.write()
+	ppm.Write()
 }
 
 // Remove ALL (sub)dependencies
 func (ppm *PpmConfig) RemoveAllDependencies() {
 	ppm.Dependencies = []string{}
 	ppm.SubDependencies = []string{}
-	ppm.write()
+	ppm.Write()
 }
 
 // Remove an item safely from the Dependencies property by its name
 func (ppm *PpmConfig) RemoveSubDependency(dependency string) {
 	index := IndexOf(dependency, ppm.SubDependencies)
 	ppm.SubDependencies = append(ppm.SubDependencies[:index], ppm.SubDependencies[index+1:]...)
-	ppm.write()
+	ppm.Write()
 }
 
 // Remove an item safely from the sub-dependencies property by its name
@@ -53,7 +53,7 @@ func (ppm *PpmConfig) RemoveDependency(dependency string) {
 		index := IndexOf(dependency, ppm.Dependencies)
 		ppm.Dependencies = append(ppm.Dependencies[:index], ppm.Dependencies[index+1:]...)
 	}
-	ppm.write()
+	ppm.Write()
 }
 
 // Check wether the config file has a certain dependency
@@ -79,7 +79,7 @@ func (ppm PpmConfig) PrettyPrint() {
 }
 
 // Write the current state of the configuartion to the config file
-func (ppm PpmConfig) write() error {
+func (ppm PpmConfig) Write() error {
 	content, err := json.MarshalIndent(ppm, "", " ")
 	if err != nil {
 		return err
