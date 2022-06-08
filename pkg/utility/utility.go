@@ -78,7 +78,7 @@ func PrintDone() {
 }
 
 func GetPluginName(name string) string {
-	if strings.HasPrefix(name, "https://") {
+	if strings.HasPrefix(name, "https://") || strings.Index(name, "/") != -1 {
 		urlParts := strings.Split(name, "/")
 		return urlParts[len(urlParts)-1]
 	} else {
