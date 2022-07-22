@@ -84,7 +84,7 @@ func installDependency(config *utility.PpmConfig, paths utility.Paths, dependenc
 		return nil
 	}
 
-	// Iterate over dependencies and install them if needed
+	// iterate over dependencies and install them if needed
 	for _, dep := range subConfig.Dependencies {
 		if !config.HasSubDependency(dep) {
 			installDependency(config, paths, dep, true)
