@@ -21,9 +21,7 @@ func install(ctx *cli.Context) error {
 		installAllDependencies(&config, paths)
 	}
 
-	for i := 0; i < dependencies.Len(); i++ {
-		repo := dependencies.Get(i)
-
+	for _, repo := range dependencies.Slice() {
 		if config.HasDependency(repo) {
 			alreadyInstalled(repo)
 		} else if err = installDependency(&config, paths, repo, false); err != nil {
@@ -56,8 +54,6 @@ func installDependency(config *utility.PpmConfig, paths utility.Paths, dependenc
 	err := utility.Clone(paths.Addons, dependency, version)
 	loadAnim.Stop()
 
-	var addDependency bool
-
 	if err != nil {
 		if err.Error() == "repository already exists" {
 			alreadyInstalled(dependency)
@@ -68,11 +64,12 @@ func installDependency(config *utility.PpmConfig, paths utility.Paths, dependenc
 		}
 	}
 
-	addDependency = (!isSubDependency && !config.HasDependency(dependency)) || (isSubDependency && !config.HasSubDependency(dependency))
+	shouldAddDep := (!isSubDependency && !config.HasDependency(dependency)) ||
+		(isSubDependency && !config.HasSubDependency(dependency))
 
-	if addDependency && isSubDependency {
+	if shouldAddDep && isSubDependency {
 		config.AddSubDependency(dependency)
-	} else if addDependency {
+	} else if shouldAddDep {
 		config.AddDependency(dependency)
 	}
 
