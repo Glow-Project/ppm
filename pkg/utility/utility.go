@@ -10,7 +10,7 @@ import (
 	"github.com/fatih/color"
 )
 
-// Check wether an absolute path exists
+// check wether an absolute path exists
 func DoesPathExist(path string) (bool, error) {
 	_, err := os.Stat(path)
 	if err == nil {
@@ -24,7 +24,7 @@ func DoesPathExist(path string) (bool, error) {
 	return false, err
 }
 
-// Create a certain directory if it doesn't exist
+// create a certain directory if it doesn't exist
 func CheckOrCreateDir(path string) error {
 	pathExisting, _ := DoesPathExist(path)
 	if pathExisting {
@@ -39,7 +39,7 @@ func CheckOrCreateDir(path string) error {
 	return nil
 }
 
-// Get the index of a certain item in a string slice
+// get the index of a certain item in a string slice
 func IndexOf[t comparable](target t, data []t) int {
 	for index, value := range data {
 		if target == value {
@@ -49,7 +49,7 @@ func IndexOf[t comparable](target t, data []t) int {
 	return -1
 }
 
-// Check wether a certain item exists in a string slice
+// check wether a certain item exists in a string slice
 func SliceContains[t comparable](target t, data []t) bool {
 	for _, v := range data {
 		if v == target {
@@ -117,7 +117,7 @@ func SliceToString(slice []string, seperator string) string {
 	return str
 }
 
-// Get the first predicate match of the slice
+// get the first predicate match of the slice
 //
 // returns nil if none of the items match
 func GetFirstMatch[t any](slice []t, predicate func(t, int) bool) *t {
