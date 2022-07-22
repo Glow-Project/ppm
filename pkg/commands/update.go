@@ -7,8 +7,8 @@ import (
 	"github.com/urfave/cli/v2"
 )
 
-// The update method is called by the cli
-// It updates all dependencies
+// the update method is called by the cli
+// it updates all dependencies
 func update(ctx *cli.Context) error {
 	paths, config, err := utility.GetPathsAndConfig()
 	if err != nil {

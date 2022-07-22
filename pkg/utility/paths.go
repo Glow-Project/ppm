@@ -6,26 +6,26 @@ import (
 	"strings"
 )
 
-// Access different important paths in the GD project
+// access different important paths in the GD project
 type Paths struct {
 	/*
-		The root of the project.
+		the root of the project.
 
-		If the project is a game, the root is on the same level
+		if the project is a game, the root is on the same level
 		as the godot config files.
 
-		If the project is a plugin, the root is somewhere under /addons
+		if the project is a plugin, the root is somewhere under /addons
 	*/
 	Root string
 
-	// The path to the addons folder
+	// the path to the addons folder
 	Addons string
 
-	// The path to the ppm.json config file
+	// the path to the ppm.json config file
 	ConfigFile string
 }
 
-// Create a new paths instance from the root path
+// create a new paths instance from the root path
 func CreatePaths(rootPath string) Paths {
 	var addons string
 	if strings.HasSuffix(filepath.Dir(rootPath), "addons") {
@@ -41,7 +41,7 @@ func CreatePaths(rootPath string) Paths {
 	}
 }
 
-// Create a new paths instance from the current working directory
+// create a new paths instance from the current working directory
 func CreatePathsFromCwd() (Paths, error) {
 	rootPath, err := os.Getwd()
 	if err != nil {

@@ -9,11 +9,11 @@ import (
 	git "github.com/go-git/go-git/v5"
 )
 
-// Clone a certain github repository into a certain folder
+// clone a certain github repository into a certain folder
 func Clone(path string, repoName string, version string) error {
-	// The clonable name of the repository
+	// the clonable name of the repository
 	var repository string
-	// The name of the repository
+	// the name of the repository
 	var name string
 
 	if IsUrl(repoName) {
@@ -37,7 +37,7 @@ func Clone(path string, repoName string, version string) error {
 	return err
 }
 
-// Update a certain repository
+// update a certain repository
 func Update(path string) error {
 	repo, err := git.PlainOpen(path)
 	if err != nil {
