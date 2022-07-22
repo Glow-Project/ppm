@@ -78,7 +78,7 @@ func PrintDone() {
 }
 
 func GetPluginName(name string) string {
-	if strings.HasPrefix(name, "https://") || strings.Index(name, "/") != -1 {
+	if strings.HasPrefix(name, "https://") || strings.Contains(name, "/") {
 		urlParts := strings.Split(name, "/")
 		return urlParts[len(urlParts)-1]
 	} else {
@@ -131,7 +131,7 @@ func GetFirstMatch[t any](slice []t, predicate func(t, int) bool) *t {
 }
 
 func IsUrl(str string) bool {
-	a, _ := regexp.Match(`https?:\/\/[a-zA-Z0-9_\-\.]+\.[a-zA-Z]{1,5}(\/[a-zA-Z0-9_\-\=\&\?\:]+)+`, []byte(str))
+	a, _ := regexp.Match(`https?:\/\/[a-zA-Z0-9_\-\.]+\.[a-zA-Z]{1,5}([a-zA-Z0-9_\/\-\=\&\?\:]+)*`, []byte(str))
 	return a
 }
 
