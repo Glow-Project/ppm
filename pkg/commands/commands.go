@@ -45,7 +45,7 @@ func Commands() []*cli.Command {
 		},
 		{
 			Name:   "tidy",
-			Usage:  "tidy the config",
+			Usage:  "clean up the config",
 			Action: tidy,
 		},
 	}

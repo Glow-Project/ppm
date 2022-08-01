@@ -40,19 +40,19 @@ func (ppm *PpmConfig) RemoveAllDependencies() {
 
 // remove an item safely from the Dependencies property by its name
 func (ppm *PpmConfig) RemoveSubDependency(dependency string) {
-	index := IndexOf(dependency, ppm.SubDependencies)
-	ppm.SubDependencies = append(ppm.SubDependencies[:index], ppm.SubDependencies[index+1:]...)
+	dependency = GetPluginName(dependency)
+	ppm.SubDependencies = Filter(ppm.SubDependencies, func(item string, _ int) bool {
+		return item != dependency
+	})
 	ppm.Write()
 }
 
 // remove an item safely from the sub-dependencies property by its name
 func (ppm *PpmConfig) RemoveDependency(dependency string) {
-	if len(ppm.Dependencies) == 1 {
-		ppm.Dependencies = []string{}
-	} else {
-		index := IndexOf(dependency, ppm.Dependencies)
-		ppm.Dependencies = append(ppm.Dependencies[:index], ppm.Dependencies[index+1:]...)
-	}
+	dependency = GetPluginName(dependency)
+	ppm.Dependencies = Filter(ppm.Dependencies, func(item string, _ int) bool {
+		return item != dependency
+	})
 	ppm.Write()
 }
 

@@ -78,7 +78,7 @@ func PrintDone() {
 }
 
 func GetPluginName(name string) string {
-	if strings.HasPrefix(name, "https://") || strings.Contains(name, "/") {
+	if strings.HasPrefix(name, "https://") {
 		urlParts := strings.Split(name, "/")
 		return urlParts[len(urlParts)-1]
 	} else {
@@ -128,6 +128,18 @@ func GetFirstMatch[t any](slice []t, predicate func(t, int) bool) *t {
 	}
 
 	return nil
+}
+
+// returns a new slice containing all the items on which the predicate returns true
+func Filter[t any](slice []t, predicate func(t, int) bool) []t {
+	newSlice := []t{}
+	for i, item := range slice {
+		if predicate(item, i) {
+			newSlice = append(newSlice, item)
+		}
+	}
+
+	return newSlice
 }
 
 func IsUrl(str string) bool {
