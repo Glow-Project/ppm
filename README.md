@@ -28,6 +28,14 @@ $ ppm init
 
 Either declare a plugin to install or install all plugins that are declared in the `ppm.json` file
 
+#### Install plugin from GitHub
+
+```bash
+$ ppm install <user>/<repository>
+```
+
+#### Install plugin from the Godot asset library (feature not available yet)
+
 ```bash
 $ ppm install <plugin>
 ```
