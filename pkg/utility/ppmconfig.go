@@ -11,7 +11,7 @@ import (
 	"strings"
 )
 
-// Representing a ppm.json configuration file
+// representing a ppm.json configuration file
 type PpmConfig struct {
 	IsPlugin        bool     `json:"plugin"`
 	Dependencies    []string `json:"dependencies"`
@@ -19,49 +19,49 @@ type PpmConfig struct {
 	filePath        string
 }
 
-// Add an item safely to the Dependencies property
+// add an item safely to the Dependencies property
 func (ppm *PpmConfig) AddDependency(dependency string) {
 	ppm.Dependencies = append(ppm.Dependencies, dependency)
 	ppm.Write()
 }
 
-// Add an item safely to the sub-dependencies property
+// add an item safely to the sub-dependencies property
 func (ppm *PpmConfig) AddSubDependency(dependency string) {
 	ppm.SubDependencies = append(ppm.SubDependencies, dependency)
 	ppm.Write()
 }
 
-// Remove ALL (sub)dependencies
+// remove ALL (sub)dependencies
 func (ppm *PpmConfig) RemoveAllDependencies() {
 	ppm.Dependencies = []string{}
 	ppm.SubDependencies = []string{}
 	ppm.Write()
 }
 
-// Remove an item safely from the Dependencies property by its name
+// remove an item safely from the Dependencies property by its name
 func (ppm *PpmConfig) RemoveSubDependency(dependency string) {
-	index := IndexOf(dependency, ppm.SubDependencies)
-	ppm.SubDependencies = append(ppm.SubDependencies[:index], ppm.SubDependencies[index+1:]...)
+	dependency = GetPluginIdentifier(dependency)
+	ppm.SubDependencies = Filter(ppm.SubDependencies, func(item string, _ int) bool {
+		return item != dependency
+	})
 	ppm.Write()
 }
 
-// Remove an item safely from the sub-dependencies property by its name
+// remove an item safely from the sub-dependencies property by its name
 func (ppm *PpmConfig) RemoveDependency(dependency string) {
-	if len(ppm.Dependencies) == 1 {
-		ppm.Dependencies = []string{}
-	} else {
-		index := IndexOf(dependency, ppm.Dependencies)
-		ppm.Dependencies = append(ppm.Dependencies[:index], ppm.Dependencies[index+1:]...)
-	}
+	dependency = GetPluginIdentifier(dependency)
+	ppm.Dependencies = Filter(ppm.Dependencies, func(item string, _ int) bool {
+		return item != dependency
+	})
 	ppm.Write()
 }
 
-// Check wether the config file has a certain dependency
+// check wether the config file has a certain dependency
 func (ppm PpmConfig) HasDependency(dependency string) bool {
 	return SliceContains(dependency, ppm.Dependencies)
 }
 
-// Check wether the config file has a certain sub-dependency
+// check wether the config file has a certain sub-dependency
 func (ppm PpmConfig) HasSubDependency(dependency string) bool {
 	return SliceContains(dependency, ppm.SubDependencies)
 }
@@ -78,7 +78,7 @@ func (ppm PpmConfig) PrettyPrint() {
 	fmt.Printf("this project is a %s\ndependencies: %v\nsubdependencies: %v", ppmType, dependencies, subDependencies)
 }
 
-// Write the current state of the configuartion to the config file
+// write the current state of the configuartion to the config file
 func (ppm PpmConfig) Write() error {
 	content, err := json.MarshalIndent(ppm, "", " ")
 	if err != nil {
@@ -93,7 +93,7 @@ func (ppm PpmConfig) Write() error {
 	return nil
 }
 
-// Parse the ppm.json file to an object
+// parse the ppm.json file to an object
 func ParsePpmConfig(filePath string) (PpmConfig, error) {
 	file, err := os.Open(filePath)
 	if err != nil {
@@ -103,7 +103,6 @@ func ParsePpmConfig(filePath string) (PpmConfig, error) {
 
 	content, err := ioutil.ReadFile(file.Name())
 	if err != nil {
-		fmt.Println(err)
 		return PpmConfig{}, err
 	}
 
@@ -114,7 +113,7 @@ func ParsePpmConfig(filePath string) (PpmConfig, error) {
 	return config, nil
 }
 
-// Create a new ppm.json file
+// create a new ppm.json file
 func CreateNewPpmConfig(path string) error {
 	configPath := filepath.Join(path, "ppm.json")
 

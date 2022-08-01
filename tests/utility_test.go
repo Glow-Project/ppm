@@ -56,11 +56,23 @@ func TestUtility(t *testing.T) {
 	})
 
 	t.Run("Test StringSliceContains function", func(t *testing.T) {
-		if !utility.SliceContains("Test", []string{"tEst", "setT", "Test"}) {
+		if !utility.SliceContains("Test", []string{"tEst", "setT", "Test"}) || utility.SliceContains("Test", []string{"idka", "rhiugh", "zuroghz"}) {
 			t.Fail()
 		}
-		if utility.SliceContains("Test", []string{"idka", "rhiugh", "zuroghz"}) {
-			t.Fail()
+	})
+
+	t.Run("Test URL recognition functions", func(t *testing.T) {
+		if !utility.IsUrl("https://something.my-url.com") ||
+			utility.IsUrl("IAmNotAnURL") {
+			t.Error("URL recognition broken")
+		}
+		if !utility.IsGithubRepoUrl("https://github.com/User/Repository") ||
+			utility.IsGithubRepoUrl("https://github.com/User") {
+			t.Error("Github Repository URL recognition broken")
+		}
+		if !utility.IsUserAndRepo("User/Repository") ||
+			utility.IsUserAndRepo("UserRepository") {
+			t.Error("User and Repository recognition broken")
 		}
 	})
 }
