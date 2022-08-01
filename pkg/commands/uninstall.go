@@ -73,7 +73,6 @@ func uninstallDependency(config *utility.PpmConfig, paths utility.Paths, depende
 	}
 
 	// path: root/addons/dependency
-	fmt.Println(path.Join(paths.Addons, utility.GetPluginName(dep)))
 	err = os.RemoveAll(path.Join(paths.Addons, utility.GetPluginName(dep)))
 	loadAnim.Stop()
 	if err != nil {

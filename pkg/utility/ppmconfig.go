@@ -103,7 +103,6 @@ func ParsePpmConfig(filePath string) (PpmConfig, error) {
 
 	content, err := ioutil.ReadFile(file.Name())
 	if err != nil {
-		fmt.Println(err)
 		return PpmConfig{}, err
 	}
 
