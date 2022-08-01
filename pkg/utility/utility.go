@@ -49,7 +49,7 @@ func IndexOf[t comparable](target t, data []t) int {
 	return -1
 }
 
-// check wether a certain item exists in a string slice
+// check whether a certain item exists in a string slice
 func SliceContains[t comparable](target t, data []t) bool {
 	for _, v := range data {
 		if v == target {
