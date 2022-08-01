@@ -77,12 +77,21 @@ func PrintDone() {
 	fmt.Print(color.GreenString("\rdone\n"))
 }
 
-func GetPluginName(name string) string {
+func GetPluginIdentifier(name string) string {
 	if strings.HasPrefix(name, "https://") {
 		urlParts := strings.Split(name, "/")
 		return urlParts[len(urlParts)-1]
 	} else {
 		return name
+	}
+}
+
+func GetPluginName(name string) string {
+	s := GetPluginIdentifier(name)
+	if strings.Contains(s, "/") {
+		return strings.Split(s, "/")[1]
+	} else {
+		return s
 	}
 }
 

@@ -40,7 +40,7 @@ func (ppm *PpmConfig) RemoveAllDependencies() {
 
 // remove an item safely from the Dependencies property by its name
 func (ppm *PpmConfig) RemoveSubDependency(dependency string) {
-	dependency = GetPluginName(dependency)
+	dependency = GetPluginIdentifier(dependency)
 	ppm.SubDependencies = Filter(ppm.SubDependencies, func(item string, _ int) bool {
 		return item != dependency
 	})
@@ -49,7 +49,7 @@ func (ppm *PpmConfig) RemoveSubDependency(dependency string) {
 
 // remove an item safely from the sub-dependencies property by its name
 func (ppm *PpmConfig) RemoveDependency(dependency string) {
-	dependency = GetPluginName(dependency)
+	dependency = GetPluginIdentifier(dependency)
 	ppm.Dependencies = Filter(ppm.Dependencies, func(item string, _ int) bool {
 		return item != dependency
 	})

@@ -54,7 +54,7 @@ func uninstallAllDependencies(config *utility.PpmConfig, paths utility.Paths, ha
 }
 
 func uninstallDependency(config *utility.PpmConfig, paths utility.Paths, dependency string, isSubDependency bool) error {
-	dep := utility.GetPluginName(dependency)
+	dep := utility.GetPluginIdentifier(dependency)
 	if !isSubDependency {
 		fmt.Println("\runinstalling", color.YellowString(dep))
 	} else {
@@ -73,7 +73,8 @@ func uninstallDependency(config *utility.PpmConfig, paths utility.Paths, depende
 	}
 
 	// path: root/addons/dependency
-	err = os.RemoveAll(path.Join(paths.Addons, dep))
+	fmt.Println(path.Join(paths.Addons, utility.GetPluginName(dep)))
+	err = os.RemoveAll(path.Join(paths.Addons, utility.GetPluginName(dep)))
 	loadAnim.Stop()
 	if err != nil {
 		return err

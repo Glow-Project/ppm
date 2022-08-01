@@ -22,9 +22,7 @@ func install(ctx *cli.Context) error {
 	}
 
 	for _, repo := range dependencies.Slice() {
-		if config.HasDependency(repo) {
-			alreadyInstalled(repo)
-		} else if err = installDependency(&config, paths, repo, false); err != nil {
+		if err = installDependency(&config, paths, repo, false); err != nil {
 			return err
 		}
 	}
@@ -38,16 +36,15 @@ func installAllDependencies(config *utility.PpmConfig, paths utility.Paths) erro
 			return err
 		}
 	}
-	utility.PrintDone()
 	return nil
 }
 
 func installDependency(config *utility.PpmConfig, paths utility.Paths, dependency string, isSubDependency bool) error {
 	dependency, version := utility.GetVersionOrNot(dependency)
 	if !isSubDependency {
-		fmt.Printf("\rinstalling %s\n", color.YellowString(utility.GetPluginName(dependency)))
+		fmt.Printf("\rinstalling %s\n", color.YellowString(utility.GetPluginIdentifier(dependency)))
 	} else {
-		fmt.Printf("\t -> installing %s\n", color.YellowString(utility.GetPluginName(dependency)))
+		fmt.Printf("\t -> installing %s\n", color.YellowString(utility.GetPluginIdentifier(dependency)))
 	}
 	loadAnim := utility.StartLoading()
 
@@ -57,7 +54,6 @@ func installDependency(config *utility.PpmConfig, paths utility.Paths, dependenc
 	if err != nil {
 		if err.Error() == "repository already exists" {
 			alreadyInstalled(dependency)
-			return nil
 		} else {
 			installError(dependency)
 			return err
