@@ -75,7 +75,7 @@ func (ppm PpmConfig) PrettyPrint() {
 	dependencies := SliceToString(ppm.Dependencies, ", ")
 	subDependencies := SliceToString(ppm.SubDependencies, ", ")
 
-	fmt.Printf("this project is a %s\ndependencies: %v\nsubdependencies: %v", ppmType, dependencies, subDependencies)
+	fmt.Printf("this project is a %s\ndependencies: %v\nsubdependencies: %v\n", ppmType, dependencies, subDependencies)
 }
 
 // write the current state of the configuartion to the config file
