@@ -3,6 +3,7 @@ package commands
 import (
 	"errors"
 	"fmt"
+	"path"
 
 	"github.com/Glow-Project/ppm/pkg/utility"
 	"github.com/fatih/color"
@@ -21,6 +22,10 @@ func initialize(ctx *cli.Context) error {
 	}
 
 	fmt.Println(color.GreenString("new ppm.json config-file generated"))
+
+	if ok, _ := utility.DoesPathExist(path.Join(paths.Root, ".git")); ok {
+		fmt.Println(color.YellowString("when using ppm it is recommended to add the addons directory to your .gitignore file"))
+	}
 
 	return nil
 }
