@@ -21,8 +21,8 @@ func install(ctx *cli.Context) error {
 		installAllDependencies(&config, paths)
 	}
 
-	for _, repo := range dependencies.Slice() {
-		if err = installDependency(&config, paths, repo, false); err != nil {
+	for _, dep := range dependencies.Slice() {
+		if err = installDependency(&config, paths, utility.DependencyFromString(dep), false); err != nil {
 			return err
 		}
 	}
@@ -39,23 +39,22 @@ func installAllDependencies(config *utility.PpmConfig, paths utility.Paths) erro
 	return nil
 }
 
-func installDependency(config *utility.PpmConfig, paths utility.Paths, dependency string, isSubDependency bool) error {
-	dependency, version := utility.GetVersionOrNot(dependency)
+func installDependency(config *utility.PpmConfig, paths utility.Paths, dependency *utility.Dependency, isSubDependency bool) error {
 	if !isSubDependency {
-		fmt.Printf("\rinstalling %s\n", color.YellowString(utility.GetPluginIdentifier(dependency)))
+		fmt.Printf("\rinstalling %s\n", color.YellowString(utility.GetPluginIdentifier(dependency.Identifier)))
 	} else {
-		fmt.Printf("\t -> installing %s\n", color.YellowString(utility.GetPluginIdentifier(dependency)))
+		fmt.Printf("\t -> installing %s\n", color.YellowString(utility.GetPluginIdentifier(dependency.Identifier)))
 	}
 	loadAnim := utility.StartLoading()
 
-	err := utility.Clone(paths.Addons, dependency, version)
+	err := utility.Clone(paths.Addons, dependency.Identifier, "")
 	loadAnim.Stop()
 
 	if err != nil {
 		if err.Error() == "repository already exists" {
-			alreadyInstalled(dependency)
+			alreadyInstalled(dependency.Identifier)
 		} else {
-			installError(dependency)
+			installError(dependency.Identifier)
 			return err
 		}
 	}
@@ -69,7 +68,7 @@ func installDependency(config *utility.PpmConfig, paths utility.Paths, dependenc
 		config.AddDependency(dependency)
 	}
 
-	subConfig, err := utility.GetPluginConfig(paths.Addons, dependency)
+	subConfig, err := utility.GetPluginConfig(paths.Addons, dependency.Identifier)
 	if err != nil {
 		if !isSubDependency {
 			utility.PrintDone()

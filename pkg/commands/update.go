@@ -28,12 +28,12 @@ func update(ctx *cli.Context) error {
 
 func updateAllDependencies(config utility.PpmConfig, paths utility.Paths) error {
 	for _, dependency := range config.Dependencies {
-		_, version := utility.GetVersionOrNot(dependency)
+		_, version := utility.GetVersionOrNot(dependency.Identifier)
 		if len(version) > 0 {
 			continue
 		}
 
-		err := utility.Update(filepath.Join(paths.Addons, dependency))
+		err := utility.Update(filepath.Join(paths.Addons, dependency.Identifier))
 		if err != nil {
 			return err
 		}
