@@ -25,7 +25,7 @@ func DependencyFromString(str string) *Dependency {
 		if isGithubUrl {
 			url = str
 		} else {
-			url = fmt.Sprint("https://github.com/%s", str)
+			url = fmt.Sprintf("https://github.com/%s", str)
 		}
 		tmp := strings.Split(str, "/")
 		identifier = fmt.Sprintf("%s/%s", tmp[len(tmp)-2], tmp[len(tmp)-1])

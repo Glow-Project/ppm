@@ -1,41 +1,8 @@
 package utility
 
 import (
-	"errors"
-	"fmt"
-	"path/filepath"
-	"strings"
-
 	git "github.com/go-git/go-git/v5"
 )
-
-// clone a certain github repository into a certain folder
-func Clone(path string, repoName string, version string) error {
-	// the clonable name of the repository
-	var repository string
-	// the name of the repository
-	var name string
-
-	if IsUrl(repoName) {
-		repository = repoName
-		tmp := strings.Split(repository, "/")
-		name = tmp[len(tmp)-1]
-	} else if IsUserAndRepo(repoName) {
-		repository = fmt.Sprintf("https://github.com/%s", repoName)
-		tmp := strings.Split(repoName, "/")
-		name = tmp[1]
-	} else {
-		// TODO: add godot asset library support
-		// name = repoName
-		return errors.New("godot asset library not supported yet")
-	}
-
-	_, err := git.PlainClone(filepath.Join(path, name), false, &git.CloneOptions{
-		URL: repository,
-	})
-
-	return err
-}
 
 // update a certain repository
 func Update(path string) error {
