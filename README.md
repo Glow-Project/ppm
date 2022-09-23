@@ -66,17 +66,15 @@ $ ppm -h
 
 ## Installation
 
-### Main way
-
-Download the binary from the [**release page**](https://github.com/Glow-Project/ppm/releases)
-
-### Installation from Source
+### With Go
 
 ```bash
-$ git clone https://github.com/Glow-Project/ppm
-
-$ go install
+$ go install github.com/Glow-Project/ppm
 ```
+
+### Without Go 
+
+Download the binary from the [**release page**](https://github.com/Glow-Project/ppm/releases)
 
 ## Requirements
 
