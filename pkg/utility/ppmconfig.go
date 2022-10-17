@@ -70,11 +70,15 @@ func (ppm PpmConfig) PrettyPrint() {
 		ppmType = "plugin"
 	}
 
-	// TODO: Print dependencies
-	// dependencies := SliceToString(ppm.Dependencies, ", ")
-	// subDependencies := SliceToString(ppm.SubDependencies, ", ")
+	depsToIdentifiers := func(deps []*Dependency) []string {
+		return Map(deps, func(item *Dependency, _ int) string {
+			return item.Identifier
+		})
+	}
+	dependencies := SliceToString(depsToIdentifiers(ppm.Dependencies), ", ")
+	subDependencies := SliceToString(depsToIdentifiers(ppm.SubDependencies), ", ")
 
-	fmt.Printf("this project is a %s\ndependencies: %v\nsubdependencies: %v\n", ppmType) //, dependencies, subDependencies)
+	fmt.Printf("this project is a %s\ndependencies: %v\nsubdependencies: %v\n", ppmType, dependencies, subDependencies)
 }
 
 // write the current state of the configuartion to the config file

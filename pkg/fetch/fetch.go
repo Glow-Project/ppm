@@ -15,7 +15,8 @@ import (
 
 func InstallDependency(dep *utility.Dependency, paths *utility.Paths) error {
 	if dep.Type == utility.GithubAsset {
-		_, err := git.PlainClone(paths.Addons, false, &git.CloneOptions{
+		fullPath := path.Join(paths.Addons, dep.Identifier)
+		_, err := git.PlainClone(fullPath, false, &git.CloneOptions{
 			URL: dep.Url,
 		})
 		if err != nil {
@@ -27,14 +28,14 @@ func InstallDependency(dep *utility.Dependency, paths *utility.Paths) error {
 		if err != nil {
 			return err
 		}
-		id := data["result"].([]map[string]string)[0]["asset_id"]
+		id := data["result"].([]interface{})[0].(map[string]interface{})["asset_id"]
 
 		data, err = r.Get(fmt.Sprintf("https://godotengine.org/asset-library/api/asset/%s", id))
 		if err != nil {
 			return err
 		}
 
-		var dwdUrl string = data["download_url"].(string)
+		dwdUrl := data["download_url"].(string)
 		f, err := os.CreateTemp("", "tempfile")
 		if err != nil {
 			return err
@@ -43,7 +44,7 @@ func InstallDependency(dep *utility.Dependency, paths *utility.Paths) error {
 
 		r.Download(dwdUrl, f)
 		f.Close()
-		err = unzip(f.Name(), path.Join(paths.Addons, dep.Identifier))
+		err = unzip(f.Name(), paths.Addons)
 		if err != nil {
 			return err
 		}

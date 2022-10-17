@@ -28,12 +28,12 @@ func DependencyFromString(str string) *Dependency {
 			url = fmt.Sprintf("https://github.com/%s", str)
 		}
 		tmp := strings.Split(str, "/")
-		identifier = fmt.Sprintf("%s/%s", tmp[len(tmp)-2], tmp[len(tmp)-1])
+		identifier = tmp[len(tmp)-1]
 		t = GithubAsset
 	} else {
 		identifier = strings.Replace(str, " ", "-", -1)
 		url = fmt.Sprintf("https://godotengine.org/asset-library/api/asset?filter=%s", str)
-		t = GithubAsset
+		t = GDAsset
 	}
 
 	return &Dependency{

@@ -151,6 +151,15 @@ func Filter[t any](slice []t, predicate func(t, int) bool) []t {
 	return newSlice
 }
 
+func Map[t any, n any](slice []t, predicate func(t, int) n) []n {
+	newSlice := []n{}
+	for i, item := range slice {
+		newSlice = append(newSlice, predicate(item, i))
+	}
+
+	return newSlice
+}
+
 func IsUrl(str string) bool {
 	a, _ := regexp.Match(`https?:\/\/[a-zA-Z0-9_\-\.]+\.[a-zA-Z]{1,5}([a-zA-Z0-9_\/\-\=\&\?\:]+)*`, []byte(str))
 	return a

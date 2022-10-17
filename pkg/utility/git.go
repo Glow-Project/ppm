@@ -5,7 +5,7 @@ import (
 )
 
 // update a certain repository
-func Update(path string) error {
+func UpdateGithubRepo(path string) error {
 	repo, err := git.PlainOpen(path)
 	if err != nil {
 		return err
