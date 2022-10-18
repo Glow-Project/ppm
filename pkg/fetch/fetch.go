@@ -13,13 +13,13 @@ import (
 	"github.com/go-git/go-git/v5"
 )
 
+// install a dependency `dep` into its directory inside the `addons` directory
 func InstallDependency(dep *utility.Dependency, paths *utility.Paths) error {
 	var err error
 	if dep.Type == utility.GithubAsset {
 		err = installGithubRepo(dep, paths)
 	} else {
 		err = installGodotAsset(dep, paths)
-
 	}
 
 	return err
@@ -45,6 +45,16 @@ func installGodotAsset(dep *utility.Dependency, paths *utility.Paths) error {
 	if err != nil {
 		return err
 	}
+
+	/* structure of data:
+		{
+	    	"result": [
+	  			{
+	        		"asset_id": "<id>"
+	    		}
+			]
+		}
+	*/
 	id := data["result"].([]interface{})[0].(map[string]interface{})["asset_id"]
 
 	data, err = r.Get(fmt.Sprintf("https://godotengine.org/asset-library/api/asset/%s", id))
