@@ -14,45 +14,62 @@ import (
 )
 
 func InstallDependency(dep *utility.Dependency, paths *utility.Paths) error {
+	var err error
 	if dep.Type == utility.GithubAsset {
-		fullPath := path.Join(paths.Addons, dep.Identifier)
-		_, err := git.PlainClone(fullPath, false, &git.CloneOptions{
-			URL: dep.Url,
-		})
-		if err != nil {
-			return err
-		}
+		err = installGithubRepo(dep, paths)
 	} else {
-		r := Requester{}
-		data, err := r.Get(dep.Url)
-		if err != nil {
-			return err
-		}
-		id := data["result"].([]interface{})[0].(map[string]interface{})["asset_id"]
+		err = installGodotAsset(dep, paths)
 
-		data, err = r.Get(fmt.Sprintf("https://godotengine.org/asset-library/api/asset/%s", id))
-		if err != nil {
-			return err
-		}
+	}
 
-		dwdUrl := data["download_url"].(string)
-		f, err := os.CreateTemp("", "tempfile")
-		if err != nil {
-			return err
-		}
-		defer os.Remove(f.Name())
+	return err
+}
 
-		r.Download(dwdUrl, f)
-		f.Close()
-		err = unzip(f.Name(), paths.Addons)
-		if err != nil {
-			return err
-		}
+// install a plugin from github
+func installGithubRepo(dep *utility.Dependency, paths *utility.Paths) error {
+	fullPath := path.Join(paths.Addons, dep.Identifier)
+	_, err := git.PlainClone(fullPath, false, &git.CloneOptions{
+		URL: dep.Url,
+	})
+	if err != nil {
+		return err
 	}
 
 	return nil
 }
 
+// install a plugin from the godot asset store
+func installGodotAsset(dep *utility.Dependency, paths *utility.Paths) error {
+	r := Requester{}
+	data, err := r.Get(dep.Url)
+	if err != nil {
+		return err
+	}
+	id := data["result"].([]interface{})[0].(map[string]interface{})["asset_id"]
+
+	data, err = r.Get(fmt.Sprintf("https://godotengine.org/asset-library/api/asset/%s", id))
+	if err != nil {
+		return err
+	}
+
+	dwdUrl := data["download_url"].(string)
+	f, err := os.CreateTemp("", "tempfile")
+	if err != nil {
+		return err
+	}
+	defer os.Remove(f.Name())
+
+	r.Download(dwdUrl, f)
+	f.Close()
+	err = unzip(f.Name(), paths.Addons)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// unzip a .zip file from src into dest
 func unzip(src, dest string) error {
 	r, err := zip.OpenReader(src)
 	if err != nil {
