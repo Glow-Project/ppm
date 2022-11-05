@@ -56,12 +56,16 @@ func (ppm *PpmConfig) RemoveDependency(dependency *Dependency) {
 
 // check wether the config file has a certain dependency
 func (ppm PpmConfig) HasDependency(dependency *Dependency) bool {
-	return SliceContains(dependency, ppm.Dependencies)
+	return Some(ppm.Dependencies, func(dep *Dependency, _ int) bool {
+		return dep.Identifier == dependency.Identifier
+	})
 }
 
 // check wether the config file has a certain sub-dependency
 func (ppm PpmConfig) HasSubDependency(dependency *Dependency) bool {
-	return SliceContains(dependency, ppm.SubDependencies)
+	return Some(ppm.SubDependencies, func(dep *Dependency, _ int) bool {
+		return dep.Identifier == dependency.Identifier
+	})
 }
 
 func (ppm PpmConfig) PrettyPrint() {
