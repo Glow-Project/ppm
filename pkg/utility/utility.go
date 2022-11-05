@@ -39,27 +39,6 @@ func CheckOrCreateDir(path string) error {
 	return nil
 }
 
-// get the index of a certain item in a string slice
-func IndexOf[t comparable](target t, data []t) int {
-	for index, value := range data {
-		if target == value {
-			return index
-		}
-	}
-	return -1
-}
-
-// check whether a certain item exists in a string slice
-func SliceContains[t comparable](target t, data []t) bool {
-	for _, v := range data {
-		if v == target {
-			return true
-		}
-	}
-
-	return false
-}
-
 func GetVersionOrNot(dependency string) (string, string) {
 	version := ""
 
@@ -124,40 +103,6 @@ func SliceToString(slice []string, seperator string) string {
 	}
 
 	return str
-}
-
-// get the first predicate match of the slice
-//
-// returns nil if none of the items match
-func GetFirstMatch[t any](slice []t, predicate func(t, int) bool) *t {
-	for i, value := range slice {
-		if predicate(value, i) {
-			return &value
-		}
-	}
-
-	return nil
-}
-
-// returns a new slice containing all the items on which the predicate returns true
-func Filter[t any](slice []t, predicate func(t, int) bool) []t {
-	newSlice := []t{}
-	for i, item := range slice {
-		if predicate(item, i) {
-			newSlice = append(newSlice, item)
-		}
-	}
-
-	return newSlice
-}
-
-func Map[t any, n any](slice []t, predicate func(t, int) n) []n {
-	newSlice := []n{}
-	for i, item := range slice {
-		newSlice = append(newSlice, predicate(item, i))
-	}
-
-	return newSlice
 }
 
 func IsUrl(str string) bool {
