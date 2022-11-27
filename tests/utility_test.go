@@ -1,7 +1,6 @@
 package tests
 
 import (
-	"fmt"
 	"path/filepath"
 	"testing"
 
@@ -17,7 +16,6 @@ func TestPaths(t *testing.T) {
 		path := "/this/is/a/test"
 		addonsPath := filepath.Join(path + "/addons")
 		paths := utility.CreatePaths(path)
-		fmt.Println(path)
 		if paths.Root != path {
 			t.Errorf(pathNotEqualMessage, paths.Root, path)
 		}

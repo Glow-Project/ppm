@@ -1,24 +1,51 @@
 package commands
 
 import (
-	"fmt"
-	"strings"
+	"encoding/json"
+	"os"
 
 	"github.com/Glow-Project/ppm/pkg/utility"
 	"github.com/urfave/cli/v2"
 )
 
 func tidy(ctx *cli.Context) error {
-	_, config, err := utility.GetPathsAndConfig()
+	paths, err := utility.CreatePathsFromCwd()
 	if err != nil {
 		return err
 	}
 
-	for i, dep := range config.Dependencies {
-		if utility.IsGithubRepoUrl(dep) {
-			tmp := strings.Split(dep, "/")
-			config.Dependencies[i] = fmt.Sprintf("%s/%s", tmp[len(tmp)-2], tmp[len(tmp)-1])
+	content, err := os.ReadFile(paths.ConfigFile)
+	if err != nil {
+		return err
+	}
+
+	var jsonContent map[string]interface{}
+	err = json.Unmarshal(content, &jsonContent)
+	if err != nil {
+		return err
+	}
+
+	strDeps, ok := jsonContent["dependencies"].([]interface{})
+	if !ok {
+		return nil
+	}
+
+	deps := []*utility.Dependency{}
+	for _, dep := range strDeps {
+		str, ok := dep.(string)
+		if !ok {
+			return nil
 		}
+		deps = append(deps, utility.DependencyFromString(str))
+	}
+
+	jsonContent["dependencies"] = deps
+	jsonData, err := json.MarshalIndent(jsonContent, "", "\t")
+	os.WriteFile(paths.ConfigFile, jsonData, 0644)
+
+	config, err := utility.ParsePpmConfig(paths.ConfigFile)
+	if err != nil {
+		return err
 	}
 
 	return config.Write()

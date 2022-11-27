@@ -28,12 +28,11 @@ func update(ctx *cli.Context) error {
 
 func updateAllDependencies(config utility.PpmConfig, paths utility.Paths) error {
 	for _, dependency := range config.Dependencies {
-		_, version := utility.GetVersionOrNot(dependency)
-		if len(version) > 0 {
+		if dependency.Type != utility.GithubAsset {
 			continue
 		}
 
-		err := utility.Update(filepath.Join(paths.Addons, dependency))
+		err := utility.UpdateGithubRepo(filepath.Join(paths.Addons, dependency.Identifier))
 		if err != nil {
 			return err
 		}
