@@ -55,7 +55,7 @@ func installGodotAsset(dep *utility.Dependency, paths *utility.Paths) error {
 			]
 		}
 	*/
-	id := data["result"].([]interface{})[0].(map[string]interface{})["asset_id"]
+	id := data["result"].([]interface{})[0].(map[string]interface{})["asset_id"].(string)
 
 	data, err = r.Get(fmt.Sprintf("https://godotengine.org/asset-library/api/asset/%s", id))
 	if err != nil {
