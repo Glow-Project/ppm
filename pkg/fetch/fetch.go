@@ -7,6 +7,7 @@ import (
 	"os"
 	"path"
 	"path/filepath"
+	"regexp"
 	"strings"
 
 	"github.com/Glow-Project/ppm/pkg/utility"
@@ -55,7 +56,12 @@ func installGodotAsset(dep *utility.Dependency, paths *utility.Paths) error {
 			]
 		}
 	*/
-	id := data["result"].([]interface{})[0].(map[string]interface{})["asset_id"].(string)
+	results := data["result"].([]interface{})
+	if len(results) == 0 {
+		return fmt.Errorf("No results for dependency \"%s\"", dep.Identifier)
+	}
+
+	id := results[0].(map[string]interface{})["asset_id"].(string)
 
 	data, err = r.Get(fmt.Sprintf("https://godotengine.org/asset-library/api/asset/%s", id))
 	if err != nil {
@@ -93,6 +99,8 @@ func unzip(src, dest string) error {
 
 	os.MkdirAll(dest, 0755)
 
+	shaRegex := regexp.MustCompile("-[0-9a-f]{40}")
+
 	writeFile := func(f *zip.File) error {
 		rc, err := f.Open()
 		if err != nil {
@@ -104,7 +112,9 @@ func unzip(src, dest string) error {
 			}
 		}()
 
-		path := filepath.Join(dest, f.Name)
+		fileName := string(shaRegex.ReplaceAll([]byte(f.Name), []byte("")))
+		path := filepath.Join(dest, fileName)
+		fmt.Println(path)
 
 		// Check for ZipSlip (Directory traversal)
 		if !strings.HasPrefix(path, filepath.Clean(dest)+string(os.PathSeparator)) {
