@@ -114,7 +114,10 @@ func ParsePpmConfig(filePath string) (PpmConfig, error) {
 	}
 
 	config := PpmConfig{}
-	json.Unmarshal([]byte(content), &config)
+	err = json.Unmarshal([]byte(content), &config)
+	if err != nil {
+		return PpmConfig{}, err
+	}
 	config.filePath = filePath
 
 	return config, nil
@@ -144,7 +147,7 @@ func CreateNewPpmConfig(path string) error {
 		SubDependencies: []*Dependency{},
 	}
 
-	content, err := json.MarshalIndent(config, "", " ")
+	content, err := json.MarshalIndent(config, "", "\t")
 	if err != nil {
 		return err
 	}
