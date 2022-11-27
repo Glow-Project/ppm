@@ -114,7 +114,6 @@ func unzip(src, dest string) error {
 
 		fileName := string(shaRegex.ReplaceAll([]byte(f.Name), []byte("")))
 		path := filepath.Join(dest, fileName)
-		fmt.Println(path)
 
 		// Check for ZipSlip (Directory traversal)
 		if !strings.HasPrefix(path, filepath.Clean(dest)+string(os.PathSeparator)) {
