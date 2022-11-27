@@ -34,7 +34,7 @@ Either declare a plugin to install or install all plugins that are declared in t
 $ ppm install <user>/<repository>
 ```
 
-#### Install plugin from the Godot asset library (feature not available yet)
+#### Install plugin from the Godot asset library
 
 ```bash
 $ ppm install <plugin>
@@ -66,15 +66,25 @@ $ ppm -h
 
 ## Installation
 
-### With Go
-
-```bash
-$ go install github.com/Glow-Project/ppm
-```
-
-### Without Go 
+### Main way
 
 Download the binary from the [**release page**](https://github.com/Glow-Project/ppm/releases)
+
+### Installation from Source
+
+```bash
+$ git clone https://github.com/Glow-Project/ppm
+
+$ go install
+```
+
+### Migration to newer versions
+
+To migrate your ppm project from an older to a newer version you can simply run:
+
+```sh
+$ ppm tidy
+```
 
 ## Requirements
 
