@@ -4,7 +4,7 @@
     <br>
     <img src="https://img.shields.io/github/license/Glow-Project/ppm" alt="badge">
     <img src="https://img.shields.io/github/issues/Glow-Project/ppm" alt="badge">
-    <img src="https://img.shields.io/github/actions/workflow/status/Glow-Project/ppm/ci?branch=main&label=ci" alt="badge">
+    <img src="https://img.shields.io/github/actions/workflow/status/Glow-Project/ppm/ci.yml?branch=main&label=ci" alt="badge">
     <br>
     <br>
     <br>
