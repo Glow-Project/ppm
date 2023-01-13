@@ -11,6 +11,9 @@ import (
 	"strings"
 )
 
+// about the naming: the "Ppm" prefix for the config was chosen,
+// because godot project config files may be supported in the future
+
 // representing a ppm.json configuration file
 type PpmConfig struct {
 	IsPlugin        bool          `json:"plugin"`
@@ -162,17 +165,9 @@ func CreateNewPpmConfig(path string) error {
 	return err
 }
 
-func GetPluginConfig(dirPath string, dependency string) (PpmConfig, error) {
-	tmp := strings.Split(dependency, "/")
-	var dependencyName string
-
-	if tmp[len(tmp)-1] != "/" {
-		dependencyName = tmp[len(tmp)-1]
-	} else {
-		dependencyName = tmp[len(tmp)-2]
-	}
-
-	config, err := ParsePpmConfig(path.Join(dirPath, dependencyName, "ppm.json"))
+// get the config of a certain plugin
+func GetPluginConfig(p *Paths, dep *Dependency) (PpmConfig, error) {
+	config, err := ParsePpmConfig(path.Join(p.Addons, dep.Identifier, "ppm.json"))
 
 	if err != nil {
 		return PpmConfig{}, err

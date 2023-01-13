@@ -58,7 +58,7 @@ func installGodotAsset(dep *utility.Dependency, paths *utility.Paths) error {
 	*/
 	results := data["result"].([]interface{})
 	if len(results) == 0 {
-		return fmt.Errorf("No results for dependency \"%s\"", dep.Identifier)
+		return fmt.Errorf("no results for dependency \"%s\"", dep.Identifier)
 	}
 
 	id := results[0].(map[string]interface{})["asset_id"].(string)

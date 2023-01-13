@@ -11,9 +11,10 @@ func Commands() []*cli.Command {
 			Action:  install,
 		},
 		{
-			Name:   "uninstall",
-			Usage:  "uninstall one or more dependencies",
-			Action: uninstall,
+			Name:    "uninstall",
+			Aliases: []string{"ui"},
+			Usage:   "uninstall one or more dependencies",
+			Action:  uninstall,
 			Flags: []cli.Flag{
 				&cli.BoolFlag{
 					Name:  "hard",
