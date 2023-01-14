@@ -36,9 +36,5 @@ func (r *Requester) Download(url string, w io.Writer) error {
 	}
 
 	_, err = io.Copy(w, response.Body)
-	if err != nil {
-		return err
-	}
-
-	return nil
+	return err
 }

@@ -16,14 +16,11 @@ import (
 
 // install a dependency `dep` into its directory inside the `addons` directory
 func InstallDependency(dep *utility.Dependency, paths *utility.Paths) error {
-	var err error
 	if dep.Type == utility.GithubAsset {
-		err = installGithubRepo(dep, paths)
-	} else {
-		err = installGodotAsset(dep, paths)
+		return installGithubRepo(dep, paths)
 	}
 
-	return err
+	return installGodotAsset(dep, paths)
 }
 
 // install a plugin from github
@@ -32,11 +29,8 @@ func installGithubRepo(dep *utility.Dependency, paths *utility.Paths) error {
 	_, err := git.PlainClone(fullPath, false, &git.CloneOptions{
 		URL: dep.Url,
 	})
-	if err != nil {
-		return err
-	}
 
-	return nil
+	return err
 }
 
 // install a plugin from the godot asset store
@@ -77,12 +71,7 @@ func installGodotAsset(dep *utility.Dependency, paths *utility.Paths) error {
 
 	r.Download(dwdUrl, f)
 	f.Close()
-	err = unzip(f.Name(), paths.Addons)
-	if err != nil {
-		return err
-	}
-
-	return nil
+	return unzip(f.Name(), paths.Addons)
 }
 
 // unzip a .zip file from src into dest
