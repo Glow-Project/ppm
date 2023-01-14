@@ -30,12 +30,7 @@ func CheckOrCreateDir(path string) error {
 		return nil
 	}
 
-	err := os.Mkdir(path, 0755)
-	if err != nil {
-		return err
-	}
-
-	return nil
+	return os.Mkdir(path, 0755)
 }
 
 func GetVersionOrNot(dependency string) (string, string) {
