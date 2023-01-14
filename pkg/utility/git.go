@@ -16,10 +16,5 @@ func UpdateGithubRepo(path string) error {
 		return err
 	}
 
-	err = w.Pull(&git.PullOptions{})
-	if err != nil {
-		return err
-	}
-
-	return nil
+	return w.Pull(&git.PullOptions{})
 }

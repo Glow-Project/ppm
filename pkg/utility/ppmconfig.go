@@ -95,12 +95,7 @@ func (ppm PpmConfig) Write() error {
 		return err
 	}
 
-	err = ioutil.WriteFile(ppm.filePath, content, 0755)
-	if err != nil {
-		return err
-	}
-
-	return nil
+	return ioutil.WriteFile(ppm.filePath, content, 0755)
 }
 
 // parse the ppm.json file to an object
