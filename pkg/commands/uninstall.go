@@ -39,8 +39,7 @@ func uninstall(ctx *cli.Context) error {
 func uninstallAllDependencies(config *utility.PpmConfig, paths *utility.Paths, hard bool) error {
 	loadAnim := utility.StartLoading()
 
-	err := os.RemoveAll(paths.Addons)
-	if err != nil {
+	if err := os.RemoveAll(paths.Addons); err != nil {
 		return err
 	}
 
@@ -64,8 +63,7 @@ func uninstallDependency(config *utility.PpmConfig, paths *utility.Paths, depend
 	subConfig, err := utility.GetPluginConfig(paths, dependency)
 	if err == nil {
 		for i := 0; i < len(subConfig.Dependencies); i++ {
-			subDep := subConfig.Dependencies[i]
-			if !config.HasDependency(subDep) {
+			if !config.HasDependency(subConfig.Dependencies[i]) {
 				uninstallDependency(config, paths, subDep, true)
 			}
 		}
@@ -78,14 +76,12 @@ func uninstallDependency(config *utility.PpmConfig, paths *utility.Paths, depend
 		return err
 	}
 
-	if !isSubDependency {
-		config.RemoveDependency(dependency)
-	} else {
+	if isSubDependency {
 		config.RemoveSubDependency(dependency)
+		return nil
 	}
 
-	if !isSubDependency {
-		utility.PrintDone()
-	}
+	config.RemoveDependency(dependency)
+	utility.PrintDone()
 	return nil
 }

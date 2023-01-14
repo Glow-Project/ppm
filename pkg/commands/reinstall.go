@@ -11,15 +11,9 @@ func reinstall(ctx *cli.Context) error {
 		return err
 	}
 
-	err = uninstallAllDependencies(&config, &paths, false)
-	if err != nil {
+	if err := uninstallAllDependencies(&config, &paths, false); err != nil {
 		return err
 	}
 
-	err = installAllDependencies(&config, &paths)
-	if err != nil {
-		return err
-	}
-
-	return nil
+	return installAllDependencies(&config, &paths)
 }

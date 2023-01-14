@@ -32,8 +32,7 @@ func updateAllDependencies(config *utility.PpmConfig, paths *utility.Paths) erro
 			continue
 		}
 
-		err := utility.UpdateGithubRepo(filepath.Join(paths.Addons, dependency.Identifier))
-		if err != nil {
+		if err := utility.UpdateGithubRepo(filepath.Join(paths.Addons, dependency.Identifier)); err != nil {
 			return err
 		}
 	}
