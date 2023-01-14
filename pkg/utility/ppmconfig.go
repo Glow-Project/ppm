@@ -125,22 +125,12 @@ func ParsePpmConfig(filePath string) (PpmConfig, error) {
 func CreateNewPpmConfig(path string) error {
 	configPath := filepath.Join(path, "ppm.json")
 
-	fileExists, _ := DoesPathExist(configPath)
-
-	if fileExists {
+	if fileExists, _ := DoesPathExist(configPath); fileExists {
 		return errors.New("file already exists")
 	}
 
-	var isPlugin bool
-
-	if strings.HasSuffix(filepath.Dir(path), "addons") {
-		isPlugin = true
-	} else {
-		isPlugin = false
-	}
-
 	config := PpmConfig{
-		IsPlugin:        isPlugin,
+		IsPlugin:        strings.HasSuffix(filepath.Dir(path), "addons"),
 		Dependencies:    []*Dependency{},
 		SubDependencies: []*Dependency{},
 	}
@@ -150,7 +140,7 @@ func CreateNewPpmConfig(path string) error {
 		return err
 	}
 
-	file, err := os.Create(filepath.Join(path, "ppm.json"))
+	file, err := os.Create(configPath)
 	if err != nil {
 		return err
 	}
