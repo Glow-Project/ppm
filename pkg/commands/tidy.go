@@ -20,8 +20,7 @@ func tidy(ctx *cli.Context) error {
 	}
 
 	var jsonContent map[string]interface{}
-	err = json.Unmarshal(content, &jsonContent)
-	if err != nil {
+	if err := json.Unmarshal(content, &jsonContent); err != nil {
 		return err
 	}
 
