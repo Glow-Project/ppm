@@ -31,8 +31,12 @@ func (r *Requester) Download(url string, w io.Writer) error {
 	}
 	defer response.Body.Close()
 
-	if response.StatusCode != 200 {
-		return fmt.Errorf("request to %s failed", url)
+	if response.StatusCode != http.StatusOK {
+		return fmt.Errorf(
+			"request to %s failed with status code %d",
+			url,
+			response.StatusCode,
+		)
 	}
 
 	_, err = io.Copy(w, response.Body)
