@@ -1,7 +1,6 @@
 package commands
 
 import (
-	"errors"
 	"fmt"
 	"path"
 
@@ -16,9 +15,8 @@ func initialize(ctx *cli.Context) error {
 		return err
 	}
 
-	err = utility.CreateNewPpmConfig(paths.Root)
-	if err != nil {
-		return errors.New("ppm.json config-file already exists in this directory")
+	if err := utility.CreateNewPpmConfig(paths.Root); err != nil {
+		return fmt.Errorf("error creating ppm.json config-file: %w", err)
 	}
 
 	fmt.Println(color.GreenString("new ppm.json config-file generated"))
