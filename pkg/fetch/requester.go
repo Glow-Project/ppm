@@ -19,7 +19,7 @@ func (r *Requester) Get(url string) (map[string]any, error) {
 	}
 
 	var result map[string]any
-	json.NewDecoder(rawResp.Body).Decode(&result)
+	err = json.NewDecoder(rawResp.Body).Decode(&result)
 
 	return result, err
 }
