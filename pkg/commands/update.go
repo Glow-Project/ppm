@@ -18,7 +18,7 @@ func update(ctx *cli.Context) error {
 	utility.CheckOrCreateDir(paths.Addons)
 
 	loadAnim := utility.StartLoading()
-	updateAllDependencies(config, paths)
+	updateAllDependencies(&config, &paths)
 	loadAnim.Stop()
 
 	utility.PrintDone()
@@ -26,7 +26,7 @@ func update(ctx *cli.Context) error {
 	return nil
 }
 
-func updateAllDependencies(config utility.PpmConfig, paths utility.Paths) error {
+func updateAllDependencies(config *utility.PpmConfig, paths *utility.Paths) error {
 	for _, dependency := range config.Dependencies {
 		if dependency.Type != utility.GithubAsset {
 			continue

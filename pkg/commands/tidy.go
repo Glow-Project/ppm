@@ -41,6 +41,9 @@ func tidy(ctx *cli.Context) error {
 
 	jsonContent["dependencies"] = deps
 	jsonData, err := json.MarshalIndent(jsonContent, "", "\t")
+	if err != nil {
+		return err
+	}
 	os.WriteFile(paths.ConfigFile, jsonData, 0644)
 
 	config, err := utility.ParsePpmConfig(paths.ConfigFile)

@@ -5,6 +5,7 @@ import (
 	"strings"
 )
 
+// asset-type enum
 const (
 	GithubAsset = "GITHUB_ASSET"
 	GDAsset     = "GODOT_ASSET"
@@ -16,9 +17,13 @@ type Dependency struct {
 	Type       string `json:"type"`
 }
 
+// create a new dependency struct from a string
 func DependencyFromString(str string) *Dependency {
+	// the (ideally) unique identifier of the dependency
 	var identifier string
+	// the url used for accessing the dependency
 	var url string
+	// the type of the dependency, GithubAsset | GDAsset
 	var t string
 
 	if isGithubUrl := IsGithubRepoUrl(str); isGithubUrl || IsUserAndRepo(str) {

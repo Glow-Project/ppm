@@ -7,6 +7,7 @@ import (
 	"net/http"
 )
 
+// a struct used for simple requests
 type Requester struct {
 	BaseUrl string
 }

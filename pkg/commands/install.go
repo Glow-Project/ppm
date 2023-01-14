@@ -65,7 +65,7 @@ func installDependency(config *utility.PpmConfig, paths *utility.Paths, dependen
 		config.AddDependency(dependency)
 	}
 
-	subConfig, err := utility.GetPluginConfig(paths.Addons, dependency.Identifier)
+	subConfig, err := utility.GetPluginConfig(paths, dependency)
 	if err != nil {
 		if !isSubDependency {
 			utility.PrintDone()
