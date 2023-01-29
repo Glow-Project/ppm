@@ -121,12 +121,12 @@ func ParsePpmConfig(filePath string) (PpmConfig, error) {
 	return config, nil
 }
 
-// create a new ppm.json file
-func CreateNewPpmConfig(path string) error {
+// create a ppm.json file
+func CreatePpmConfig(path string) (PpmConfig, error) {
 	configPath := filepath.Join(path, "ppm.json")
 
 	if fileExists, _ := DoesPathExist(configPath); fileExists {
-		return errors.New("file already exists")
+		return PpmConfig{}, errors.New("file already exists")
 	}
 
 	config := PpmConfig{
@@ -137,17 +137,17 @@ func CreateNewPpmConfig(path string) error {
 
 	content, err := json.MarshalIndent(config, "", "\t")
 	if err != nil {
-		return err
+		return config, err
 	}
 
 	file, err := os.Create(configPath)
 	if err != nil {
-		return err
+		return config, err
 	}
 
 	_, err = file.Write(content)
 
-	return err
+	return config, err
 }
 
 // get the config of a certain plugin
