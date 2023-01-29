@@ -15,7 +15,7 @@ func initialize(ctx *cli.Context) error {
 		return err
 	}
 
-	if err := utility.CreateNewPpmConfig(paths.Root); err != nil {
+	if _, err := utility.CreatePpmConfig(paths.Root); err != nil {
 		return fmt.Errorf("error creating ppm.json config-file: %w", err)
 	}
 

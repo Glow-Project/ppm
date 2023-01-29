@@ -12,7 +12,7 @@
 
 **Pour Package Manager**
 
-Easily install and manage Godot-plugins from GitHub using the command line
+Easily install and manage Godot-plugins from GitHub and the Godot Asset Library using the command line
 
 ## Commands
 
@@ -86,7 +86,16 @@ To migrate your ppm project from an older to a newer version you can simply run:
 $ ppm tidy
 ```
 
-## Requirements
+## Create ppm-compatible plugins
 
-- [**Git**](https://git-scm.com/) _Only needed with [v1.0.1](https://github.com/Glow-Project/ppm/releases/tag/1.0.1) or lower_
-- [**Golang**](https://golang.org/) _Only needed for installation from source_
+1. (optional) Create a new project in Godot and create a directory with the name of your plugin inside the `addons` directory
+1. Create the plugin (`plugin.cfg`, `plugin.gd`, ...)
+1. (optional) run `ppm init` inside of the directory of your plugin
+1. publish your plugin (e.g. `/home/GodotProject/addons/my-plugin`) to GitHub as a public repository
+1. Now you can install your plugin via `ppm install <your-username>/<your-repository-name>`
+
+#### References
+
+- [Glow-Project/ppm-ui](https://github.com/Glow-Project/ppm-ui)
+- [Glow-Project/SettingsManager](https://github.com/Glow-Project/SettingsManager)
+- [Glow-Project/DialogueSystem](https://github.com/Glow-Project/DialogueSystem)

@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"io/ioutil"
 	"os"
 	"path"
 	"path/filepath"
@@ -95,7 +94,7 @@ func (ppm PpmConfig) Write() error {
 		return err
 	}
 
-	return ioutil.WriteFile(ppm.filePath, content, 0755)
+	return os.WriteFile(ppm.filePath, content, 0755)
 }
 
 // parse the ppm.json file to an object
@@ -106,7 +105,7 @@ func ParsePpmConfig(filePath string) (PpmConfig, error) {
 	}
 	defer file.Close()
 
-	content, err := ioutil.ReadFile(file.Name())
+	content, err := os.ReadFile(file.Name())
 	if err != nil {
 		return PpmConfig{}, err
 	}
@@ -121,12 +120,12 @@ func ParsePpmConfig(filePath string) (PpmConfig, error) {
 	return config, nil
 }
 
-// create a new ppm.json file
-func CreateNewPpmConfig(path string) error {
+// create a ppm.json file
+func CreatePpmConfig(path string) (PpmConfig, error) {
 	configPath := filepath.Join(path, "ppm.json")
 
 	if fileExists, _ := DoesPathExist(configPath); fileExists {
-		return errors.New("file already exists")
+		return PpmConfig{}, errors.New("file already exists")
 	}
 
 	config := PpmConfig{
@@ -137,17 +136,17 @@ func CreateNewPpmConfig(path string) error {
 
 	content, err := json.MarshalIndent(config, "", "\t")
 	if err != nil {
-		return err
+		return config, err
 	}
 
 	file, err := os.Create(configPath)
 	if err != nil {
-		return err
+		return config, err
 	}
 
 	_, err = file.Write(content)
 
-	return err
+	return config, err
 }
 
 // get the config of a certain plugin

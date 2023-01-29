@@ -13,3 +13,15 @@ tasks:
   tidy:
     cmds:
       - go mod tidy
+  test:
+    desc: Run go test unittests
+    cmds:
+      - mkdir -p coverage
+      - go test -run "^Test[^_]" -v ./... -coverprofile=coverage/unittest_coverage.out -covermode=atomic
+  coverage:
+    desc: Generate coverage report
+    cmds:
+      - |
+        echo "mode: atomic" > coverage/total
+        grep "^github.com" -h coverage/*.out | sort >> coverage/total
+        go tool cover -html=coverage/total -o coverage/coverage.html
