@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"io/ioutil"
 	"os"
 	"path"
 	"path/filepath"
@@ -95,7 +94,7 @@ func (ppm PpmConfig) Write() error {
 		return err
 	}
 
-	return ioutil.WriteFile(ppm.filePath, content, 0755)
+	return os.WriteFile(ppm.filePath, content, 0755)
 }
 
 // parse the ppm.json file to an object
@@ -106,7 +105,7 @@ func ParsePpmConfig(filePath string) (PpmConfig, error) {
 	}
 	defer file.Close()
 
-	content, err := ioutil.ReadFile(file.Name())
+	content, err := os.ReadFile(file.Name())
 	if err != nil {
 		return PpmConfig{}, err
 	}
