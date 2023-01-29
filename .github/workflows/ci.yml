@@ -15,4 +15,4 @@ jobs:
           go-version: "1.18"
 
       - name: Run Tests
-        run: go test ./tests
+        run: go test -run "^Test[^_]" -v ./...
