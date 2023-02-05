@@ -15,7 +15,7 @@ import (
 )
 
 // install a dependency `dep` into its directory inside the `addons` directory
-func InstallDependency(dep *utility.Dependency, paths *utility.Paths) error {
+func InstallDependency(dep utility.Dependency, paths utility.Paths) error {
 	if dep.Type == utility.GithubAsset {
 		return installGithubRepo(dep, paths)
 	}
@@ -24,7 +24,7 @@ func InstallDependency(dep *utility.Dependency, paths *utility.Paths) error {
 }
 
 // install a plugin from github
-func installGithubRepo(dep *utility.Dependency, paths *utility.Paths) error {
+func installGithubRepo(dep utility.Dependency, paths utility.Paths) error {
 	fullPath := path.Join(paths.Addons, dep.Identifier)
 	_, err := git.PlainClone(fullPath, false, &git.CloneOptions{
 		URL: dep.Url,
@@ -34,7 +34,7 @@ func installGithubRepo(dep *utility.Dependency, paths *utility.Paths) error {
 }
 
 // install a plugin from the godot asset store
-func installGodotAsset(dep *utility.Dependency, paths *utility.Paths) error {
+func installGodotAsset(dep utility.Dependency, paths utility.Paths) error {
 	r := Requester{}
 	data, err := r.Get(dep.Url)
 	if err != nil {

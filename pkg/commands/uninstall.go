@@ -18,14 +18,14 @@ func uninstall(ctx *cli.Context) error {
 
 	dependencies := ctx.Args()
 	if len(dependencies.First()) == 0 {
-		uninstallAllDependencies(&config, &paths, ctx.Bool("hard"))
+		uninstallAllDependencies(&config, paths, ctx.Bool("hard"))
 		return nil
 	}
 
 	for i := 0; i < dependencies.Len(); i++ {
 		dep := utility.DependencyFromString(dependencies.Get(i))
 		if config.HasDependency(dep) && !config.HasSubDependency(dep) {
-			uninstallDependency(&config, &paths, dep, false)
+			uninstallDependency(&config, paths, dep, false)
 		} else if config.HasSubDependency(dep) {
 			fmt.Println(color.RedString("the plugin"), color.YellowString(dep.Identifier), color.RedString("is a sub dependency and can only be uninstalled by uninstalling its parent"))
 		} else {
@@ -36,7 +36,7 @@ func uninstall(ctx *cli.Context) error {
 	return nil
 }
 
-func uninstallAllDependencies(config *utility.PpmConfig, paths *utility.Paths, hard bool) error {
+func uninstallAllDependencies(config *utility.PpmConfig, paths utility.Paths, hard bool) error {
 	loadAnim := utility.StartLoading()
 
 	if err := os.RemoveAll(paths.Addons); err != nil {
@@ -52,7 +52,7 @@ func uninstallAllDependencies(config *utility.PpmConfig, paths *utility.Paths, h
 	return nil
 }
 
-func uninstallDependency(config *utility.PpmConfig, paths *utility.Paths, dependency *utility.Dependency, isSubDependency bool) error {
+func uninstallDependency(config *utility.PpmConfig, paths utility.Paths, dependency utility.Dependency, isSubDependency bool) error {
 	if !isSubDependency {
 		fmt.Println("\runinstalling", color.YellowString(dependency.Identifier))
 	} else {

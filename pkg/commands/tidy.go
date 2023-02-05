@@ -29,7 +29,7 @@ func tidy(ctx *cli.Context) error {
 		return nil
 	}
 
-	deps := []*utility.Dependency{}
+	deps := []utility.Dependency{}
 	for _, dep := range strDeps {
 		str, ok := dep.(string)
 		if !ok {
