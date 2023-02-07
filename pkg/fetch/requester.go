@@ -12,7 +12,7 @@ type Requester struct {
 	BaseUrl string
 }
 
-func (r *Requester) Get(url string) (map[string]any, error) {
+func (r Requester) Get(url string) (map[string]any, error) {
 	rawResp, err := http.Get(r.BaseUrl + url)
 	if err != nil {
 		return map[string]any{}, err
@@ -24,7 +24,7 @@ func (r *Requester) Get(url string) (map[string]any, error) {
 	return result, err
 }
 
-func (r *Requester) Download(url string, w io.Writer) error {
+func (r Requester) Download(url string, w io.Writer) error {
 	response, err := http.Get(r.BaseUrl + url)
 	if err != nil {
 		return err

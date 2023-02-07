@@ -18,7 +18,7 @@ type Dependency struct {
 }
 
 // create a new dependency struct from a string
-func DependencyFromString(str string) *Dependency {
+func DependencyFromString(str string) Dependency {
 	// the (ideally) unique identifier of the dependency
 	var identifier string
 	// the url used for accessing the dependency
@@ -41,7 +41,7 @@ func DependencyFromString(str string) *Dependency {
 		t = GDAsset
 	}
 
-	return &Dependency{
+	return Dependency{
 		Identifier: identifier,
 		Url:        url,
 		Type:       t,

@@ -19,11 +19,11 @@ func install(ctx *cli.Context) error {
 
 	dependencies := ctx.Args()
 	if dependencies.Len() == 0 {
-		installAllDependencies(&config, &paths)
+		installAllDependencies(&config, paths)
 	}
 
 	for _, dep := range dependencies.Slice() {
-		if err = installDependency(&config, &paths, utility.DependencyFromString(dep), false); err != nil {
+		if err = installDependency(&config, paths, utility.DependencyFromString(dep), false); err != nil {
 			return err
 		}
 	}
@@ -31,7 +31,7 @@ func install(ctx *cli.Context) error {
 	return nil
 }
 
-func installAllDependencies(config *utility.PpmConfig, paths *utility.Paths) error {
+func installAllDependencies(config *utility.PpmConfig, paths utility.Paths) error {
 	for _, dependency := range config.Dependencies {
 		if err := installDependency(config, paths, dependency, false); err != nil {
 			return err
@@ -40,7 +40,7 @@ func installAllDependencies(config *utility.PpmConfig, paths *utility.Paths) err
 	return nil
 }
 
-func installDependency(config *utility.PpmConfig, paths *utility.Paths, dependency *utility.Dependency, isSubDependency bool) error {
+func installDependency(config *utility.PpmConfig, paths utility.Paths, dependency utility.Dependency, isSubDependency bool) error {
 	if !isSubDependency {
 		fmt.Printf("\rinstalling %s\n", color.YellowString(utility.GetPluginIdentifier(dependency.Identifier)))
 	} else {
