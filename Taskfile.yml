@@ -1,6 +1,9 @@
 version: "3"
 
 tasks:
+  setup:
+    cmds:
+      - mkdir coverage
   build:
     cmds:
       - go build -ldflags "-X main.BuildVersion=DEVELOPMENT"
@@ -16,7 +19,6 @@ tasks:
   test:
     desc: Run go test unittests
     cmds:
-      - mkdir -p coverage
       - go test -run "^Test[^_]" -v ./... -coverprofile=coverage/unittest_coverage.out -covermode=atomic
   coverage:
     desc: Generate coverage report
