@@ -1,11 +1,8 @@
 package commands
 
 import (
-	"fmt"
-
 	"github.com/Glow-Project/ppm/pkg/fetch"
 	"github.com/Glow-Project/ppm/pkg/utility"
-	"github.com/fatih/color"
 	"github.com/go-git/go-git/v5"
 	"github.com/urfave/cli/v2"
 )
@@ -43,9 +40,9 @@ func installAllDependencies(config *utility.PpmConfig, paths utility.Paths) erro
 
 func installDependency(config *utility.PpmConfig, paths utility.Paths, dependency utility.Dependency, isSubDependency bool) error {
 	if !isSubDependency {
-		fmt.Printf("\rinstalling %s\n", color.YellowString(utility.GetPluginIdentifier(dependency.Identifier)))
+		utility.ColorPrintln("\rinstalling {YLW}%s", dependency.Identifier)
 	} else {
-		fmt.Printf("\t -> installing %s\n", color.YellowString(utility.GetPluginIdentifier(dependency.Identifier)))
+		utility.ColorPrintln("\t -> installing {YLW}%s", dependency.Identifier)
 	}
 	loadAnim := utility.StartLoading()
 
@@ -103,13 +100,13 @@ func installDependency(config *utility.PpmConfig, paths utility.Paths, dependenc
 }
 
 func alreadyInstalled(dependency string) {
-	fmt.Println(color.GreenString("\rthe plugin"), color.YellowString(dependency), color.GreenString("is already installed"))
+	utility.ColorPrintln("\r{GRN}the plugin {YLW}%s {GRN}is already installed", dependency)
 }
 
 func installError(dependency string) {
-	fmt.Printf(color.RedString("\rsome issues occured while trying to install %s, %s"), color.YellowString(dependency), color.RedString("are you sure you spelled it right?\n"))
+	utility.ColorPrintln("\r{RED}some issues occured while trying to install {YLW}%s {RED}are you sure you spelled it right?", dependency)
 }
 
 func versionError(dependency string, version string) {
-	fmt.Printf(color.RedString("\rthe version \"%s\" %s %s %s"), color.YellowString(version), color.RedString("for the dependency"), color.YellowString(dependency), color.RedString("was not found. The default version was installed\n"))
+	utility.ColorPrintln("\r{RED}the version {YLW}%s {RED} for the dependency {YLW}%s {RED}was not found. The default version was installed", version, dependency)
 }

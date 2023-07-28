@@ -1,12 +1,10 @@
 package commands
 
 import (
-	"fmt"
 	"os"
 	"path"
 
 	"github.com/Glow-Project/ppm/pkg/utility"
-	"github.com/fatih/color"
 	"github.com/urfave/cli/v2"
 )
 
@@ -27,9 +25,9 @@ func uninstall(ctx *cli.Context) error {
 		if config.HasDependency(dep) && !config.HasSubDependency(dep) {
 			uninstallDependency(&config, paths, dep, false)
 		} else if config.HasSubDependency(dep) {
-			fmt.Println(color.RedString("the plugin"), color.YellowString(dep.Identifier), color.RedString("is a sub dependency and can only be uninstalled by uninstalling its parent"))
+			utility.ColorPrintln("{RED}the plugin {YLW}%s {RED}is a sub-dependency and can only be uninstalled by uninstalling its parent", dep.Identifier)
 		} else {
-			fmt.Println(color.RedString("the plugin"), color.YellowString(dep.Identifier), color.RedString("is not installed"))
+			utility.ColorPrintln("{RED}the plugin %s is not installed", dep.Identifier)
 		}
 	}
 
@@ -54,9 +52,9 @@ func uninstallAllDependencies(config *utility.PpmConfig, paths utility.Paths, ha
 
 func uninstallDependency(config *utility.PpmConfig, paths utility.Paths, dependency utility.Dependency, isSubDependency bool) error {
 	if !isSubDependency {
-		fmt.Println("\runinstalling", color.YellowString(dependency.Identifier))
+		utility.ColorPrintln("\runinstalling {YLW}%s", dependency.Identifier)
 	} else {
-		fmt.Println("\t -> uninstalling", color.YellowString(dependency.Identifier))
+		utility.ColorPrintln("\t -> uninstalling {YLW}%s", dependency.Identifier)
 	}
 	loadAnim := utility.StartLoading()
 
