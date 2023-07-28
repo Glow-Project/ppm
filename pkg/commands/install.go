@@ -111,5 +111,5 @@ func installError(dependency string) {
 }
 
 func versionError(dependency string, version string) {
-	fmt.Printf(color.RedString("\rthe version \"%s\" for the dependency %s %s"), color.YellowString(dependency), color.RedString("was not found. The default version was installed\n"))
+	fmt.Printf(color.RedString("\rthe version \"%s\" %s %s %s"), color.YellowString(version), color.RedString("for the dependency"), color.YellowString(dependency), color.RedString("was not found. The default version was installed\n"))
 }
