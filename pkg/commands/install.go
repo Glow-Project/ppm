@@ -6,6 +6,7 @@ import (
 	"github.com/Glow-Project/ppm/pkg/fetch"
 	"github.com/Glow-Project/ppm/pkg/utility"
 	"github.com/fatih/color"
+	"github.com/go-git/go-git/v5"
 	"github.com/urfave/cli/v2"
 )
 
@@ -51,8 +52,22 @@ func installDependency(config *utility.PpmConfig, paths utility.Paths, dependenc
 	err := fetch.InstallDependency(dependency, paths)
 	loadAnim.Stop()
 
-	if err != nil {
-		installError(dependency.Identifier)
+	switch err.(type) {
+	case nil:
+		break
+	case *fetch.InvalidVersionError:
+		dependency.Version = nil
+		versionError(dependency.Identifier, err.(*fetch.InvalidVersionError).Version)
+	case *fetch.CloneError:
+		gitErr := err.(*fetch.CloneError).GitError
+		if gitErr == git.ErrRepositoryAlreadyExists {
+			alreadyInstalled(dependency.Identifier)
+			return nil
+		} else {
+			installError(dependency.Identifier)
+			return err.(*fetch.CloneError).GitError
+		}
+	default:
 		return err
 	}
 
@@ -93,4 +108,8 @@ func alreadyInstalled(dependency string) {
 
 func installError(dependency string) {
 	fmt.Printf(color.RedString("\rsome issues occured while trying to install %s, %s"), color.YellowString(dependency), color.RedString("are you sure you spelled it right?\n"))
+}
+
+func versionError(dependency string, version string) {
+	fmt.Printf(color.RedString("\rthe version \"%s\" for the dependency %s %s"), color.YellowString(dependency), color.RedString("was not found. The default version was installed\n"))
 }

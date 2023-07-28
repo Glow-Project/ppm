@@ -26,11 +26,24 @@ func InstallDependency(dep utility.Dependency, paths utility.Paths) error {
 // install a plugin from github
 func installGithubRepo(dep utility.Dependency, paths utility.Paths) error {
 	fullPath := path.Join(paths.Addons, dep.Identifier)
-	_, err := git.PlainClone(fullPath, false, &git.CloneOptions{
+	repo, err := git.PlainClone(fullPath, false, &git.CloneOptions{
 		URL: dep.Url,
 	})
+	if err != nil {
+		return &CloneError{err}
+	}
 
-	return err
+	if dep.Version != nil {
+		r, err := repo.Tag(*dep.Version)
+		if err == nil {
+			wt, _ := repo.Worktree()
+			wt.Checkout(&git.CheckoutOptions{Hash: r.Hash()})
+		} else {
+			return &InvalidVersionError{Version: *dep.Version}
+		}
+	}
+
+	return nil
 }
 
 // install a plugin from the godot asset store
