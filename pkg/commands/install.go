@@ -52,20 +52,20 @@ func installDependency(config *utility.PpmConfig, paths utility.Paths, dependenc
 	err := fetch.InstallDependency(dependency, paths)
 	loadAnim.Stop()
 
-	switch err.(type) {
+	switch err := err.(type) {
 	case nil:
 		break
 	case *fetch.InvalidVersionError:
 		dependency.Version = nil
-		versionError(dependency.Identifier, err.(*fetch.InvalidVersionError).Version)
+		versionError(dependency.Identifier, err.Version)
 	case *fetch.CloneError:
-		gitErr := err.(*fetch.CloneError).GitError
+		gitErr := err.GitError
 		if gitErr == git.ErrRepositoryAlreadyExists {
 			alreadyInstalled(dependency.Identifier)
 			return nil
 		} else {
 			installError(dependency.Identifier)
-			return err.(*fetch.CloneError).GitError
+			return err.GitError
 		}
 	default:
 		return err
