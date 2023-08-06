@@ -3,7 +3,7 @@ package commands
 import (
 	"path/filepath"
 
-	"github.com/Glow-Project/ppm/pkg/utility"
+	"github.com/Glow-Project/ppm/internal/utility"
 	"github.com/urfave/cli/v2"
 )
 

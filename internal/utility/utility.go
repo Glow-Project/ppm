@@ -2,11 +2,8 @@ package utility
 
 import (
 	"errors"
-	"fmt"
 	"os"
 	"strings"
-
-	"github.com/fatih/color"
 )
 
 // check wether an absolute path exists
@@ -47,7 +44,7 @@ func GetVersionOrNot(dependency string) (string, string) {
 }
 
 func PrintDone() {
-	fmt.Print(color.GreenString("\rdone\n"))
+	ColorPrintln("{GRN}done")
 }
 
 func GetPluginIdentifier(name string) string {

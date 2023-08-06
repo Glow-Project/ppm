@@ -10,7 +10,7 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/Glow-Project/ppm/pkg/utility"
+	"github.com/Glow-Project/ppm/internal/utility"
 	"github.com/go-git/go-git/v5"
 )
 
