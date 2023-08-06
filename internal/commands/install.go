@@ -1,8 +1,8 @@
 package commands
 
 import (
-	"github.com/Glow-Project/ppm/pkg/fetch"
-	"github.com/Glow-Project/ppm/pkg/utility"
+	"github.com/Glow-Project/ppm/internal/fetch"
+	"github.com/Glow-Project/ppm/internal/utility"
 	"github.com/go-git/go-git/v5"
 	"github.com/urfave/cli/v2"
 )
