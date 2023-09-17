@@ -4,6 +4,8 @@ import (
 	"testing"
 
 	"path/filepath"
+
+	"github.com/Glow-Project/ppm/internal/paths"
 )
 
 const (
@@ -14,7 +16,7 @@ func TestPaths(t *testing.T) {
 	t.Run("Create Paths instance as Game", func(t *testing.T) {
 		path := "/this/is/a/test"
 		addonsPath := filepath.Join(path + "/addons")
-		paths := CreatePaths(path)
+		paths := paths.CreatePaths(path)
 		if paths.Root != path {
 			t.Errorf(pathNotEqualMessage, paths.Root, path)
 		}
@@ -26,7 +28,7 @@ func TestPaths(t *testing.T) {
 	t.Run("Create Paths instance as Plugin", func(t *testing.T) {
 		path := "/this/is/a/test/addons/myplugin"
 		addonsPath := filepath.Join(path, "..")
-		paths := CreatePaths(path)
+		paths := paths.CreatePaths(path)
 
 		if paths.Root != path {
 			t.Errorf(pathNotEqualMessage, paths.Root, path)

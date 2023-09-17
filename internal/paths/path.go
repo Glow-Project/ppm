@@ -1,4 +1,4 @@
-package utility
+package paths
 
 import (
 	"os"
