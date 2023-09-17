@@ -12,7 +12,7 @@ func Commands() []*cli.Command {
 		},
 		{
 			Name:    "uninstall",
-			Aliases: []string{"ui"},
+			Aliases: []string{"u"},
 			Usage:   "uninstall one or more dependencies",
 			Action:  uninstall,
 			Flags: []cli.Flag{
@@ -24,10 +24,9 @@ func Commands() []*cli.Command {
 			},
 		},
 		{
-			Name:    "reinstall",
-			Aliases: []string{"ri"},
-			Usage:   "delete and reinstall all dependencies",
-			Action:  reinstall,
+			Name:   "reinstall",
+			Usage:  "delete and reinstall all dependencies",
+			Action: reinstall,
 		},
 		{
 			Name:   "init",
