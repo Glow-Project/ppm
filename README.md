@@ -7,6 +7,7 @@
     <img src="https://img.shields.io/github/actions/workflow/status/Glow-Project/ppm/ci.yml?branch=main&label=ci" alt="badge">
     <br>
     <br>
+    <a href="https://asciinema.org/a/D0cRCFOtekhWOmeC8TxUcpJXo" target="_blank"><img src="https://asciinema.org/a/D0cRCFOtekhWOmeC8TxUcpJXo.svg" /></a>
     <br>
 </div>
 

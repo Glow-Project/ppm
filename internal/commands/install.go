@@ -64,7 +64,8 @@ func installDependency(config *pm.Config, pth paths.Paths, dependency pm.Depende
 			return nil
 		} else {
 			installError(dependency.Identifier)
-			return err.GitError
+			// return err.GitError
+			return nil
 		}
 	default:
 		return err

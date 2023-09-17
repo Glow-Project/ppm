@@ -1,3 +1,5 @@
 build
 coverage
 .DS_Store
+rec.sh
+TMP/

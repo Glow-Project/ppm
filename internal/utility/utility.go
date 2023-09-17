@@ -43,7 +43,7 @@ func GetVersionOrNot(dependency string) (string, string) {
 }
 
 func PrintDone() {
-	ColorPrintln("{GRN}done")
+	ColorPrintln("\r{GRN}done")
 }
 
 func GetPluginIdentifier(name string) string {
