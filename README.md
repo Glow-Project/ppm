@@ -7,13 +7,14 @@
     <img src="https://img.shields.io/github/actions/workflow/status/Glow-Project/ppm/ci.yml?branch=main&label=ci" alt="badge">
     <br>
     <br>
-    <a href="https://asciinema.org/a/D0cRCFOtekhWOmeC8TxUcpJXo" target="_blank"><img src="https://asciinema.org/a/D0cRCFOtekhWOmeC8TxUcpJXo.svg" /></a>
     <br>
 </div>
 
 **Pour Package Manager**
 
 Easily install and manage Godot-plugins from GitHub and the Godot Asset Library using the command line
+
+[![asciicast](https://asciinema.org/a/D0cRCFOtekhWOmeC8TxUcpJXo.svg)](https://asciinema.org/a/D0cRCFOtekhWOmeC8TxUcpJXo)
 
 ## Commands
 
