@@ -32,4 +32,10 @@ func TestPathsCreation(t *testing.T) {
 	require.Equal(t, "/test/addons/x", p2.Root)
 	require.Equal(t, cln("/test/addons"), p2.Addons)
 	require.Equal(t, cln("/test/addons/x/ppm.json"), p2.ConfigFile)
+
+	p3, err := CreatePathsFromCwd()
+	require.Nil(t, err)
+	require.NotNil(t, p3.Addons)
+	require.NotNil(t, p3.ConfigFile)
+	require.NotNil(t, p3.Root)
 }
