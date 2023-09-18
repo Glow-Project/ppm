@@ -3,14 +3,14 @@ package commands
 import (
 	"path/filepath"
 
+	"github.com/Glow-Project/ppm/internal/paths"
+	"github.com/Glow-Project/ppm/internal/pm"
 	"github.com/Glow-Project/ppm/internal/utility"
 	"github.com/urfave/cli/v2"
 )
 
-// the update method is called by the cli
-// it updates all dependencies
 func update(ctx *cli.Context) error {
-	paths, config, err := utility.GetPathsAndConfig()
+	paths, config, err := pm.GetPathsAndConfig()
 	if err != nil {
 		return err
 	}
@@ -26,13 +26,13 @@ func update(ctx *cli.Context) error {
 	return nil
 }
 
-func updateAllDependencies(config *utility.PpmConfig, paths *utility.Paths) error {
+func updateAllDependencies(config *pm.Config, pth *paths.Paths) error {
 	for _, dependency := range config.Dependencies {
-		if dependency.Type != utility.GithubAsset {
+		if dependency.Type != pm.GithubAsset || dependency.Version != nil {
 			continue
 		}
 
-		if err := utility.UpdateGithubRepo(filepath.Join(paths.Addons, dependency.Identifier)); err != nil {
+		if err := utility.UpdateGithubRepo(filepath.Join(pth.Addons, dependency.Identifier)); err != nil {
 			return err
 		}
 	}

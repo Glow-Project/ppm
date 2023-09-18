@@ -14,6 +14,8 @@
 
 Easily install and manage Godot-plugins from GitHub and the Godot Asset Library using the command line
 
+[![asciicast](https://asciinema.org/a/D0cRCFOtekhWOmeC8TxUcpJXo.svg)](https://asciinema.org/a/D0cRCFOtekhWOmeC8TxUcpJXo)
+
 ## Commands
 
 ### Initialize

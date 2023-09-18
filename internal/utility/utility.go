@@ -1,7 +1,6 @@
 package utility
 
 import (
-	"errors"
 	"os"
 	"strings"
 )
@@ -44,7 +43,7 @@ func GetVersionOrNot(dependency string) (string, string) {
 }
 
 func PrintDone() {
-	ColorPrintln("{GRN}done")
+	ColorPrintln("\r{GRN}done")
 }
 
 func GetPluginIdentifier(name string) string {
@@ -63,20 +62,6 @@ func GetPluginName(name string) string {
 	} else {
 		return s
 	}
-}
-
-func GetPathsAndConfig() (Paths, PpmConfig, error) {
-	paths, err := CreatePathsFromCwd()
-	if err != nil {
-		return Paths{}, PpmConfig{}, err
-	}
-
-	config, err := ParsePpmConfig(paths.ConfigFile)
-	if err != nil {
-		return Paths{}, PpmConfig{}, errors.New("could not find ppm.json file - try to run: ppm init")
-	}
-
-	return paths, config, nil
 }
 
 func SliceToString(slice []string, seperator string) string {

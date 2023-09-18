@@ -1,4 +1,6 @@
 build
 coverage
-ppm
 .DS_Store
+rec.sh
+TMP/
+.prettierrc

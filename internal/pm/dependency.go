@@ -1,8 +1,10 @@
-package utility
+package pm
 
 import (
 	"fmt"
 	"strings"
+
+	"github.com/Glow-Project/ppm/internal/utility"
 )
 
 // asset-type enum
@@ -37,7 +39,7 @@ func DependencyFromString(str string) Dependency {
 		str = strings.Replace(str, "@"+v, "", 1)
 	}
 
-	if isGithubUrl := IsGithubRepoUrl(str); isGithubUrl || IsUserAndRepo(str) {
+	if isGithubUrl := utility.IsGithubRepoUrl(str); isGithubUrl || utility.IsUserAndRepo(str) {
 		if isGithubUrl {
 			url = str
 		} else {

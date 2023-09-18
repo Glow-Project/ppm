@@ -4,17 +4,19 @@ import (
 	"encoding/json"
 	"os"
 
-	"github.com/Glow-Project/ppm/internal/utility"
+	"github.com/Glow-Project/ppm/internal/paths"
+	"github.com/Glow-Project/ppm/internal/pm"
+
 	"github.com/urfave/cli/v2"
 )
 
 func tidy(ctx *cli.Context) error {
-	paths, err := utility.CreatePathsFromCwd()
+	pth, err := paths.CreatePathsFromCwd()
 	if err != nil {
 		return err
 	}
 
-	content, err := os.ReadFile(paths.ConfigFile)
+	content, err := os.ReadFile(pth.ConfigFile)
 	if err != nil {
 		return err
 	}
@@ -29,13 +31,13 @@ func tidy(ctx *cli.Context) error {
 		return nil
 	}
 
-	deps := []utility.Dependency{}
+	deps := []pm.Dependency{}
 	for _, dep := range strDeps {
 		str, ok := dep.(string)
 		if !ok {
 			return nil
 		}
-		deps = append(deps, utility.DependencyFromString(str))
+		deps = append(deps, pm.DependencyFromString(str))
 	}
 
 	jsonContent["dependencies"] = deps
@@ -43,9 +45,9 @@ func tidy(ctx *cli.Context) error {
 	if err != nil {
 		return err
 	}
-	os.WriteFile(paths.ConfigFile, jsonData, 0644)
+	os.WriteFile(pth.ConfigFile, jsonData, 0644)
 
-	config, err := utility.ParsePpmConfig(paths.ConfigFile)
+	config, err := pm.ParseConfig(pth.ConfigFile)
 	if err != nil {
 		return err
 	}

@@ -2,26 +2,28 @@ package commands
 
 import (
 	"github.com/Glow-Project/ppm/internal/fetch"
+	"github.com/Glow-Project/ppm/internal/paths"
+	"github.com/Glow-Project/ppm/internal/pm"
 	"github.com/Glow-Project/ppm/internal/utility"
 	"github.com/go-git/go-git/v5"
 	"github.com/urfave/cli/v2"
 )
 
 func install(ctx *cli.Context) error {
-	paths, config, err := utility.GetPathsAndConfig()
+	pth, config, err := pm.GetPathsAndConfig()
 	if err != nil {
 		return err
 	}
 
-	utility.CheckOrCreateDir(paths.Addons)
+	utility.CheckOrCreateDir(pth.Addons)
 
 	dependencies := ctx.Args()
 	if dependencies.Len() == 0 {
-		installAllDependencies(&config, paths)
+		installAllDependencies(&config, pth)
 	}
 
 	for _, dep := range dependencies.Slice() {
-		if err = installDependency(&config, paths, utility.DependencyFromString(dep), false); err != nil {
+		if err = installDependency(&config, pth, pm.DependencyFromString(dep), false); err != nil {
 			return err
 		}
 	}
@@ -29,16 +31,16 @@ func install(ctx *cli.Context) error {
 	return nil
 }
 
-func installAllDependencies(config *utility.PpmConfig, paths utility.Paths) error {
+func installAllDependencies(config *pm.Config, pth paths.Paths) error {
 	for _, dependency := range config.Dependencies {
-		if err := installDependency(config, paths, dependency, false); err != nil {
+		if err := installDependency(config, pth, dependency, false); err != nil {
 			return err
 		}
 	}
 	return nil
 }
 
-func installDependency(config *utility.PpmConfig, paths utility.Paths, dependency utility.Dependency, isSubDependency bool) error {
+func installDependency(config *pm.Config, pth paths.Paths, dependency pm.Dependency, isSubDependency bool) error {
 	if !isSubDependency {
 		utility.ColorPrintln("\rinstalling {YLW}%s", dependency.Identifier)
 	} else {
@@ -46,7 +48,7 @@ func installDependency(config *utility.PpmConfig, paths utility.Paths, dependenc
 	}
 	loadAnim := utility.StartLoading()
 
-	err := fetch.InstallDependency(dependency, paths)
+	err := fetch.InstallDependency(dependency, pth)
 	loadAnim.Stop()
 
 	switch err := err.(type) {
@@ -62,7 +64,8 @@ func installDependency(config *utility.PpmConfig, paths utility.Paths, dependenc
 			return nil
 		} else {
 			installError(dependency.Identifier)
-			return err.GitError
+			// return err.GitError
+			return nil
 		}
 	default:
 		return err
@@ -77,7 +80,7 @@ func installDependency(config *utility.PpmConfig, paths utility.Paths, dependenc
 		config.AddDependency(dependency)
 	}
 
-	subConfig, err := utility.GetPluginConfig(paths, dependency)
+	subConfig, err := pm.GetPluginConfig(pth, dependency)
 	if err != nil {
 		if !isSubDependency {
 			utility.PrintDone()
@@ -88,7 +91,7 @@ func installDependency(config *utility.PpmConfig, paths utility.Paths, dependenc
 	// iterate over dependencies and install them if needed
 	for _, dep := range subConfig.Dependencies {
 		if !config.HasSubDependency(dep) {
-			installDependency(config, paths, dep, true)
+			installDependency(config, pth, dep, true)
 		}
 	}
 

@@ -10,22 +10,23 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/Glow-Project/ppm/internal/utility"
+	"github.com/Glow-Project/ppm/internal/paths"
+	"github.com/Glow-Project/ppm/internal/pm"
 	"github.com/go-git/go-git/v5"
 )
 
 // install a dependency `dep` into its directory inside the `addons` directory
-func InstallDependency(dep utility.Dependency, paths utility.Paths) error {
-	if dep.Type == utility.GithubAsset {
-		return installGithubRepo(dep, paths)
+func InstallDependency(dep pm.Dependency, pth paths.Paths) error {
+	if dep.Type == pm.GithubAsset {
+		return installGithubRepo(dep, pth)
 	}
 
-	return installGodotAsset(dep, paths)
+	return installGodotAsset(dep, pth)
 }
 
 // install a plugin from github
-func installGithubRepo(dep utility.Dependency, paths utility.Paths) error {
-	fullPath := path.Join(paths.Addons, dep.Identifier)
+func installGithubRepo(dep pm.Dependency, pth paths.Paths) error {
+	fullPath := path.Join(pth.Addons, dep.Identifier)
 	repo, err := git.PlainClone(fullPath, false, &git.CloneOptions{
 		URL: dep.Url,
 	})
@@ -47,7 +48,7 @@ func installGithubRepo(dep utility.Dependency, paths utility.Paths) error {
 }
 
 // install a plugin from the godot asset store
-func installGodotAsset(dep utility.Dependency, paths utility.Paths) error {
+func installGodotAsset(dep pm.Dependency, pth paths.Paths) error {
 	r := Requester{}
 	data, err := r.Get(dep.Url)
 	if err != nil {
@@ -84,7 +85,7 @@ func installGodotAsset(dep utility.Dependency, paths utility.Paths) error {
 
 	r.Download(dwdUrl, f)
 	f.Close()
-	return unzip(f.Name(), paths.Addons)
+	return unzip(f.Name(), pth.Addons)
 }
 
 // unzip a .zip file from src into dest
