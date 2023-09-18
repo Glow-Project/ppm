@@ -9,8 +9,6 @@ import (
 	"github.com/urfave/cli/v2"
 )
 
-// the update method is called by the cli
-// it updates all dependencies
 func update(ctx *cli.Context) error {
 	paths, config, err := pm.GetPathsAndConfig()
 	if err != nil {
@@ -30,7 +28,7 @@ func update(ctx *cli.Context) error {
 
 func updateAllDependencies(config *pm.Config, pth *paths.Paths) error {
 	for _, dependency := range config.Dependencies {
-		if dependency.Type != pm.GithubAsset {
+		if dependency.Type != pm.GithubAsset || dependency.Version != nil {
 			continue
 		}
 
