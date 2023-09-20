@@ -36,6 +36,14 @@ Either declare a plugin to install or install all plugins that are declared in t
 $ ppm install <user>/<repository>
 ```
 
+You can also install a certain version/tag of the plugin
+
+```bash
+$ ppm install <user>/<repository>@<version>
+```
+
+When not defining a version, ppm always chooses the default branch
+
 #### Install plugin from the Godot asset library
 
 ```bash
